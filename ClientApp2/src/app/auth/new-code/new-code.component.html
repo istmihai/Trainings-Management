@@ -1,0 +1,18 @@
+<div class="container">
+    <form  class="form" [formGroup]="ReqPass" action="">
+        
+        <mat-card>
+            <mat-card-title>Request Code</mat-card-title>
+            <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Email</mat-label>
+          <input formControlName="email" matInput >
+          <mat-icon matSuffix   >email</mat-icon>
+          <mat-hint>Enter email</mat-hint>
+        </mat-form-field>
+    </p>
+    <button mat-button routerLink="/newpass" (click)="ReqCode()">Send Email</button>
+    </mat-card>
+    </form>
+</div>
+    

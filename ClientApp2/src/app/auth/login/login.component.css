@@ -1,0 +1,21 @@
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:1rem;
+}
+
+.nextButton{
+    float: right;
+}
+.loginButton{
+    float: right;;
+}
+.forgotButton{
+    float:left;
+}
+.mat-raised-button{
+    background-color: #009999;
+    color:white;
+  }

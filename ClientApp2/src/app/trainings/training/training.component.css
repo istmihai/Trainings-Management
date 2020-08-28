@@ -1,0 +1,12 @@
+li{
+list-style: none;
+}
+.finished{
+    background-color: #87b987;
+}
+.inProgess{
+    background-color: rgb(216, 216, 29);
+}
+.canceled{
+    background-color: red;
+}

@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "trainingmanagement-5cda0": {
+      "hosting": {
+        "ClientApp2": [
+          "trainingmanagement-5cda0"
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+<li *ngFor="let item of info ;index as i">  {{i+1}}. <span>{{item.Firstname}} {{item.Lastname}}</span> 
+   | Status 
+    <span class="status"
+   [ngStyle]="{'color': getColor(statusList[i])}"
+    >  {{statusList[i]}}</span>
+    <li>
