@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 export class LoginComponent implements OnInit {
 
   constructor(private fb:FormBuilder,private auth:AuthService,private http:HttpClient) { }
-  UserActivated:boolean=false;
+  UserActivated:boolean;
   EmailForm=  this.fb.group({
     email:['',[Validators.email,Validators.required]],
   });
@@ -36,9 +36,12 @@ get codePassword(){
   return this.NewPassword.get('Password');
 }
   VerifyEmail(){
-    this.http.get(`/api/verifyEmail?email=${this.email.value}`,{observe:'response'}).
+    this.http.get(`/api/verifyEmail?email=${this.email.value}`,{observe:'response',responseType:'text'},).
     subscribe(response=>{
-      if(response.body==='Activated') this.UserActivated=true;
+      if(response.body==='Activated'){
+        console.log(response.body);
+        this.UserActivated=true;
+      } 
       else   this.UserActivated=false;
       
     }

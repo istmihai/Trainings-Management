@@ -13,6 +13,7 @@ import { MainComponent } from './main/main.component';
 import { EmployeeAddComponent } from './employees/employee-add/employee-add.component';
 import { canActivate } from '@angular/fire/auth-guard';
 import { AngularFireAuthGuard, hasCustomClaim, redirectUnauthorizedTo, redirectLoggedInTo } from '@angular/fire/auth-guard';
+import { DashboardComponent } from './dashboard/dashboard.component';
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
   {path:'login',component:LoginComponent},
@@ -27,8 +28,9 @@ const routes: Routes = [
   {path:'home',component:EmployeeComponent},
   {path:'employees',component:EmployeesComponent},
   {path:'employee/add',component:EmployeeAddComponent},
-  {path:'employee/edit',component:EmployeeEditComponent}
-] ,canActivate:[AngularFireAuthGuard]}
+  {path:'employee/edit',component:EmployeeEditComponent},
+  {path:'dashboard',component:DashboardComponent}
+]}
 
 ];
 

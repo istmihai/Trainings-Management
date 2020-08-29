@@ -10,7 +10,10 @@
       <a mat-list-item routerLink="/home">
         <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon> Home</a>
       <a mat-list-item routerLink="/trainings">Trainings</a>
+      <a mat-list-item routerLink="/training/add">Add Training</a>
       <a mat-list-item routerLink="/employees" >Employees</a>
+      <a mat-list-item routerLink="/employee/add" >Add Employee</a>
+
       <a mat-list-item (click)="signOut()" routerLink="/login">Logout</a>
     </mat-nav-list>
     <mat-nav-list class="list" *ngIf="!Admin">

@@ -31,6 +31,7 @@ namespace TrainingManagement.Models
         [FirestoreProperty]
         public string PhotoUrl { get; set; }
         [FirestoreProperty]
+        
         public string Role { get; set; }
        [FirestoreDocumentCreateTimestamp]
         public DateTime CreationStamp { get; set; }

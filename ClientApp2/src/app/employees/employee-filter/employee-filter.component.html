@@ -1,0 +1,46 @@
+<form action="" [formGroup]="FilterForm">
+    <mat-form-field>
+<input type="text"
+             formControlName="username"  
+             placeholder="Username"
+             aria-label="Number"
+             matInput
+             [matAutocomplete]="autoUsername">
+      <mat-autocomplete #autoUsername="matAutocomplete">
+        <mat-option *ngFor="let option of filtredUsernameOptions | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+  
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="text"
+                     formControlName="name"  
+                     placeholder="Name"
+                     aria-label="Number"
+                     matInput
+                     [matAutocomplete]="autoName">
+              <mat-autocomplete #autoName="matAutocomplete">
+                <mat-option *ngFor="let option of filtredNameOptions | async" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
+          
+            </mat-form-field>
+            <mat-form-field>
+                <input type="text"
+                             formControlName="email"  
+                             placeholder="Email"
+                             aria-label="Number"
+                             matInput
+                             [matAutocomplete]="autoEmail">
+                      <mat-autocomplete #autoEmail="matAutocomplete">
+                        <mat-option *ngFor="let option of filtredEmailOptions | async" [value]="option">
+                          {{option}}
+                        </mat-option>
+                      </mat-autocomplete>
+                  
+                    </mat-form-field>
+                    <button mat-stroked-button color="primary" (click)="ApplyFilter()" >Apply Filter</button>
+ </form>

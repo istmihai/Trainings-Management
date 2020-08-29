@@ -42,6 +42,11 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MainComponent } from './main/main.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatMenuModule } from '@angular/material/menu';
+import { CardComponent } from './charts/card/card.component';
+import { EmployeeFilterComponent } from './employees/employee-filter/employee-filter.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,7 +67,13 @@ import { MainComponent } from './main/main.component';
    
     NewCodeComponent,
    
-    MainComponent
+    MainComponent,
+   
+    DashboardComponent,
+   
+    CardComponent,
+   
+    EmployeeFilterComponent
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
@@ -93,6 +104,8 @@ import { MainComponent } from './main/main.component';
     MatCardModule,
     MatSelectModule,
     MatButtonModule,
+    MatGridListModule,
+    MatMenuModule,
     
   ],
   providers: [   MatDatepickerModule,

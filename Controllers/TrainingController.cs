@@ -23,6 +23,7 @@ namespace TrainingManagement.Controllers
         [HttpPost("api/training/add")]
         public async Task<ActionResult> Create(Training training)
         {
+            if (this.HttpContext.Session.GetString("Role") != "Admin") return Unauthorized();
           await  _trainingService.CreateTraining(training);
             return Ok();
         }

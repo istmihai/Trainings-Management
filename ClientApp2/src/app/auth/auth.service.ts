@@ -16,7 +16,8 @@ export class AuthService {
     employee$:Observable<Employee | null>;
     role:Observable<boolean>;
   constructor(private auth:AngularFireAuth,private router:Router , private http:HttpClient,private db:AngularFirestore) { 
-      this.employee$=this.auth.authState.pipe(
+    auth.setPersistence('session').then(()=>
+    this.employee$=this.auth.authState.pipe(
         switchMap(user=>{
           if(user){
             return this.db.doc<Employee>(`Employees/${user.uid}`).valueChanges();
@@ -26,7 +27,7 @@ export class AuthService {
           
         }
         )
-      )
+      ))
      this.role=this.auth.authState.pipe(
         switchMap(user=>
           user.getIdTokenResult().then(

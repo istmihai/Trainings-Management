@@ -23,11 +23,12 @@ namespace TrainingManagement.Controllers
             _emailSender = emailSender;
         }
 
-        [HttpGet("api/users")]
+     /*   [HttpGet("api/users")]
         public IEnumerable<Employee> FiltereEmployees([FromQuery] EmployeeFilter filter)
         {
             return _employeeService.GetEmployees(filter);
-        }
+           
+        }*/
 
 
         [HttpPost("api/employee/add")]

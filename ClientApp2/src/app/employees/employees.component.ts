@@ -28,6 +28,12 @@ export class EmployeesComponent implements OnInit {
     })
 
   }
+  receiveEmployees($event){
+    this.employees=$event;
+    this.employees.subscribe(data=>{
+      this.dataSource=new MatTableDataSource(data);
+    })
+  }
   ngAfterViewInit(): void {
 this.employeeService.GetEmployees().subscribe(data=>{
   this.dataSource=new MatTableDataSource(data);

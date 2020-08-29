@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using TrainingManagement.Interfaces;
 using TrainingManagement.Models;
@@ -24,8 +25,9 @@ namespace TrainingManagement.Services
 
         public async Task AddTraining(string trainingId, string employeeId)
         {
-            var employee =  _firestoreDb.GetFirestoreDb().Collection("Employees").Document(employeeId).GetSnapshotAsync().Result.ConvertTo<Employee>();
+            var employee = _firestoreDb.GetFirestoreDb().Collection("Employees").Document(employeeId).GetSnapshotAsync().Result.ConvertTo<Employee>();
             var training = _firestoreDb.GetFirestoreDb().Collection("Trainings").Document(trainingId).GetSnapshotAsync().Result.ConvertTo<Training>();
+
             var employeeInfo = new Dictionary<string, string>()
             {
                 {"employeeId",employee.Id },
@@ -43,7 +45,18 @@ namespace TrainingManagement.Services
 
         public async Task CreateTraining(Training training)
         {
-            await _firestoreDb.GetFirestoreDb().Collection("Trainings").AddAsync(training);
+            await _firestoreDb.GetFirestoreDb().Collection("TrainingsFilter").Document("Location").UpdateAsync("Location", FieldValue.ArrayUnion(training.Location));
+            await _firestoreDb.GetFirestoreDb().Collection("TrainingsFilter").Document("Title").UpdateAsync("Title", FieldValue.ArrayUnion(training.Title));
+
+            Dictionary<string, int> stats = new Dictionary<string, int>()
+            {
+                { "Done",0},
+                {"In Progess",0 },
+                {"Finished",0 }
+            };
+          var tran=  await _firestoreDb.GetFirestoreDb().Collection("Trainings").AddAsync(training);
+         await   _firestoreDb.GetFirestoreDb().Collection("Trainings").Document(tran.Id).Collection("Stats").Document("Stats").CreateAsync(stats);
+ 
         }
 
         public async Task DeleteTraining([FromQuery] string id)

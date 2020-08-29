@@ -13,6 +13,6 @@ namespace TrainingManagement.Interfaces
         Task EditEmployee(Employee employee);
 
         Task<bool> ValidateUsername(string username);
-        IEnumerable<Employee> GetEmployees(EmployeeFilter filter);
+     //   IEnumerable<Employee> GetEmployees(EmployeeFilter filter);
     }
 }

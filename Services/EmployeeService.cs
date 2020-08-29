@@ -16,7 +16,10 @@ namespace TrainingManagement.Services
     {
         private readonly IFirestore _firestoreDb;
 
-       
+       public EmployeeService(IFirestore firestore)
+        {
+            _firestoreDb = firestore;
+        }
 
     
         public async Task AddEmployee(Employee employee)
@@ -79,7 +82,7 @@ namespace TrainingManagement.Services
            
         }
 
-        public IEnumerable<Employee> GetEmployees(EmployeeFilter filter)
+     /*   public IEnumerable<Employee> GetEmployees(EmployeeFilter filter)
         {
            foreach(Employee employee in Employees)
             {
@@ -99,7 +102,7 @@ namespace TrainingManagement.Services
             }
             return FiltredEmployees;
         }
-
+     */
         public async Task<bool>  ValidateUsername(string username)
         {
             var docRef = await _firestoreDb.GetFirestoreDb().Collection("Employees").WhereEqualTo("Username", username).GetSnapshotAsync();
