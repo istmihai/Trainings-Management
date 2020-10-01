@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrainingManagement.Interfaces;
 using TrainingManagement.Models;
+using Google.Rpc;
+
 namespace TrainingManagement.Controllers
 {
     [ApiController]
@@ -34,23 +36,25 @@ namespace TrainingManagement.Controllers
         [HttpPost("api/employee/add")]
         public async Task<ActionResult> Create([FromBody] Employee emp)
         {
+            var validateUsername = await _employeeService.ValidateUsername(emp.Username);
+            if (!validateUsername) return BadRequest();
             await  _employeeService.AddEmployee(emp);
             await _emailSender.SendInvitation(emp);
             return Ok();
-
+            
 
         }
 
         [HttpPost("/api/employee/delete")]
 
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> Delete([FromQuery] string Id)
         {
-            await _employeeService.DeleteEmployee(id);
-            await FirebaseAuth.DefaultInstance.DeleteUserAsync(id);
+            await _employeeService.DeleteEmployee(Id);
+            await FirebaseAuth.DefaultInstance.DeleteUserAsync(Id);
             return Ok();
         }
 
-        [HttpPost("/api/employee/update")]
+        [HttpPost("/api/employee/edit")]
         public async Task<ActionResult> Update( Employee emp)
         {
             await _employeeService.EditEmployee(emp);
@@ -70,7 +74,7 @@ namespace TrainingManagement.Controllers
             }
             catch (Exception)
             {
-                return Ok(true);
+                return Ok();
             }
         }
 
@@ -79,9 +83,15 @@ namespace TrainingManagement.Controllers
         {
             bool isValid = await _employeeService.ValidateUsername(username);
             if (isValid) return Ok();
-            else return Ok("Username is already used !");
+            else return Ok("Username is already used");
         }
-
+        
+        [HttpPost("api/employee/changephoto")]
+        public async Task<ActionResult> UpdatePhoto ([FromQuery] string code,[FromQuery] string employeeId)
+        {
+            await _employeeService.ChangePhoto(employeeId, code);
+            return Ok();
+        }
 
     }
 }

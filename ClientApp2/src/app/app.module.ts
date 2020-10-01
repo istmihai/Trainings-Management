@@ -4,6 +4,14 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
+
+
+import {MatDividerModule} from '@angular/material/divider'; 
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NavigationComponent } from './navigation/navigation/navigation.component';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -34,19 +42,41 @@ import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
 
 
+import {DragDropModule} from '@angular/cdk/drag-drop'; 
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
+import {MatCheckboxModule} from '@angular/material/checkbox'
 
+
+import {MatSnackBarModule} from '@angular/material/snack-bar'; 
+import {MatDialogModule} from '@angular/material/dialog'; 
 import {MatStepperModule} from '@angular/material/stepper'; 
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MatNativeDateModule, MatPseudoCheckboxModule } from '@angular/material/core';
 import { MainComponent } from './main/main.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatMenuModule } from '@angular/material/menu';
 import { CardComponent } from './charts/card/card.component';
 import { EmployeeFilterComponent } from './employees/employee-filter/employee-filter.component';
+import { TrainingChartComponent } from './charts/training-chart/training-chart.component';
+import { TrainingFilterComponent } from './trainings/training-filter/training-filter.component';
+import { EmployeeProfileComponent } from './employees/employee-profile/employee-profile.component';
+import { EmployeeChartComponent } from './charts/employee-chart/employee-chart.component';
+import { TrainingEmployeesComponent } from './trainings/training-employees/training-employees.component';
+import { EmployeeDialogComponent } from './trainings/employee-dialog/employee-dialog.component';
+import { EmployeeSnackbarComponent } from './employees/employee-snackbar/employee-snackbar.component';
+import { EmployeeDeleteComponent } from './employees/employee-delete/employee-delete.component';
+import { TrainingDeleteComponent } from './trainings/training-delete/training-delete.component';
+import { TrainingCardComponent } from './trainings/training-card/training-card.component';
+import { EmployeeTrainingsComponent } from './employees/employee-trainings/employee-trainings.component';
+import { EmployeeBarchartComponent } from './charts/employee-barchart/employee-barchart.component';
+import { TrainingsInprogressComponent } from './charts/trainings-inprogress/trainings-inprogress.component';
+import { EmployeeTrainingsFilterComponent } from './employees/employee-trainings-filter/employee-trainings-filter.component';
+import { ChartsGeneralComponent } from './charts-general/charts-general.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -73,25 +103,65 @@ import { EmployeeFilterComponent } from './employees/employee-filter/employee-fi
    
     CardComponent,
    
-    EmployeeFilterComponent
+    EmployeeFilterComponent,
+   
+    TrainingChartComponent,
+   
+    TrainingFilterComponent,
+   
+    EmployeeProfileComponent,
+   
+    EmployeeChartComponent,
+   
+    TrainingEmployeesComponent,
+   
+    EmployeeDialogComponent,
+   
+    EmployeeSnackbarComponent,
+   
+    EmployeeDeleteComponent,
+   
+    TrainingDeleteComponent,
+   
+    TrainingCardComponent,
+   
+    EmployeeTrainingsComponent,
+   
+    EmployeeBarchartComponent,
+   
+    TrainingsInprogressComponent,
+   
+    EmployeeTrainingsFilterComponent,
+   
+    ChartsGeneralComponent
+   
+    
   ],
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule, 
     AngularFireAuthModule,
+    AngularFireStorageModule,
     ReactiveFormsModule,
     AngularFireMessagingModule,
     BrowserModule,
+    MatDividerModule,
+    NgxChartsModule,
+    DragDropModule,
+    MatSnackBarModule,
+    MatCheckboxModule,
     MatAutocompleteModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    MatSnackBarModule,
     LayoutModule,
     MatToolbarModule,
     MatNativeDateModule,
     MatDatepickerModule,
     MatStepperModule,
     MatButtonModule,
+    MatDialogModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
@@ -105,6 +175,7 @@ import { EmployeeFilterComponent } from './employees/employee-filter/employee-fi
     MatSelectModule,
     MatButtonModule,
     MatGridListModule,
+    MatProgressSpinnerModule,
     MatMenuModule,
     
   ],

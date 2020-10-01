@@ -1,11 +1,11 @@
 <div class="grid-container">
-  <h1 class="mat-h1">Dashboard</h1>
-  <mat-grid-list cols="2" rowHeight="350px">
-    <mat-grid-tile *ngFor="let card of cards | async" [colspan]="card.cols" [rowspan]="card.rows">
-      <mat-card class="dashboard-card">
+  <h1 class="mat-h1" style="color:black">Dashboard</h1>
+  <mat-grid-list cols="2"  rowHeight="2:1" >
+    <mat-grid-tile class="chart" *ngFor="let i of [1]" [colspan]="(cards | async)?.barChart.cols" [rowspan]="(cards | async)?.barChart.cols">
+      <mat-card  class="dashboard-card chart">
         <mat-card-header>
           <mat-card-title>
-            {{card.title}}
+            Trainings Chart
             <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
               <mat-icon>more_vert</mat-icon>
             </button>
@@ -16,7 +16,32 @@
           </mat-card-title>
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
-          <div>Card Content Here</div>
+        
+          <app-employee-barchart></app-employee-barchart>
+        </mat-card-content>
+      </mat-card>
+    </mat-grid-tile>
+    <mat-grid-tile *ngFor="let i of [1,2]" [colspan]="(cards | async)?.trainingTable.cols" [rowspan]="(cards | async)?.trainingTable.cols">
+      <mat-card class="dashboard-card">
+        <mat-card-header>
+          <mat-card-title>
+            <span *ngIf="i==1"> Trainings in progress</span>
+            <span *ngIf="i==2"> Upcoming  trainings</span>
+
+            <button mat-icon-button class="more-button" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" xPosition="before">
+              <button mat-menu-item>Expand</button>
+              <button mat-menu-item>Remove</button>
+            </mat-menu>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content class="dashboard-card-content">
+          
+          <app-trainings-inprogress  title="Trainings in progress" *ngIf="i==1" status="InProgress"></app-trainings-inprogress>
+          <app-trainings-inprogress title="Upcoming trainings" *ngIf="i==2" status="NotStarted"></app-trainings-inprogress>
+
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

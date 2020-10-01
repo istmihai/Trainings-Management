@@ -2,6 +2,7 @@
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit.Encodings;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,19 +46,35 @@ namespace TrainingManagement.Services
             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Name").UpdateAsync("Name", FieldValue.ArrayUnion(employee.Firstname + " " + employee.Lastname));
 
             await _firestoreDb.GetFirestoreDb().Collection("Employees").Document(auth.Uid).SetAsync(employee);
+          
         }
 
-        public async Task DeleteEmployee(string id)
+        public async Task ChangePhoto(string employeeId, string code) 
         {
-         /* TO DO GET EMPLOYEE OBJECT INSTEAD OF ID
-           await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Username").UpdateAsync("Username", FieldValue.ArrayUnion(employee.Username));
-            await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Email").UpdateAsync("Email", FieldValue.ArrayUnion(employee.Email));
-            await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Name").UpdateAsync("Name", FieldValue.ArrayUnion(employee.Firstname + " " + employee.Lastname));
-         */
-            var employeeRef = _firestoreDb.GetFirestoreDb().Collection("Employees").Document(id);
+            Dictionary<string, object> update = new Dictionary<string, object>()
+            {
+                { "PhotoUrl", code }
+            };
+            
+            await _firestoreDb.GetFirestoreDb().Collection("Employees").Document(employeeId).UpdateAsync(update);
+
+        }
+
+        public async Task DeleteEmployee(string employeeId)
+        {
+            var snapshot = await _firestoreDb.GetFirestoreDb().Collection("Employees").Document(employeeId).GetSnapshotAsync();
+            Employee _employee = snapshot.ConvertTo<Employee>();
+
+            await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Username").UpdateAsync("Username", FieldValue.ArrayRemove(_employee.Username));
+
+             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Email").UpdateAsync("Email", FieldValue.ArrayRemove(_employee.Email));
+             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Name").UpdateAsync("Name", FieldValue.ArrayRemove(_employee.Firstname + " " + _employee.Lastname));
+
+            var employeeRef = _firestoreDb.GetFirestoreDb().Collection("Employees").Document(employeeId);
+            
             await employeeRef.DeleteAsync();
          
-            await FirebaseAuth.DefaultInstance.DeleteUserAsync(id);
+            await FirebaseAuth.DefaultInstance.DeleteUserAsync(employeeId);
         }
 
         public async Task EditEmployee(Employee employee)

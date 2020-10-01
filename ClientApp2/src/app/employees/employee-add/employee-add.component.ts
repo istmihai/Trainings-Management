@@ -1,8 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Employee } from 'src/app/shared/employee.model';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, AbstractControl, ValidatorFn, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { firestore } from 'firebase';
+import { EmployeesService } from 'src/app/shared/employees.service';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { debounceTime, take, map } from 'rxjs/operators';
+import { Timestamp } from 'rxjs/internal/operators/timestamp';
+import { Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-employee-add',
@@ -10,25 +15,69 @@ import { firestore } from 'firebase';
   styleUrls: ['./employee-add.component.css']
 })
 export class EmployeeAddComponent implements OnInit {
-
-  constructor(private fb:FormBuilder,private http:HttpClient) { }
+  constructor(private fb:FormBuilder,private employeeService:EmployeesService,private afs:AngularFirestore) { }
   employee:Employee;
-  CreateUser = this.fb.group({
-    username:['',[Validators.required]],
-      email:['',[Validators.email,Validators.required]],
-      photourl:['',[Validators.required]],
-      firstname:['',[Validators.required]],
-      lastname:['',[Validators.required]],
-      birthdate:['',[Validators.required]],
-      role:['',[Validators.required]],
-
-  })
+  roles=['Admin','Employee'];
+  CreateUser:FormGroup;
   AddUser(){
+    console.log(this.CreateUser.valid);
+    console.log(this.CreateUser.value);
+    
     this.employee=this.CreateUser.value;
-    console.log(this.employee);
-    this.http.post<Employee>('api/employee/add',this.employee).subscribe();
-    console.log(this.employee)
+    this.employeeService.AddEmployee(this.employee).subscribe();
+   
   }
   ngOnInit(): void {
+    this.CreateUser = this.fb.group({
+        username:['',[Validators.required,Validators.minLength(6)],this.existingUsername()],
+        email:['',[Validators.email,Validators.required],this.existingEmail()],
+        firstname:['',[Validators.required]],
+        departament:['',[Validators.required]],
+        lastname:['',[Validators.required]],
+        birthdate:['',[Validators.required]],
+        role:['',[Validators.required]]
+  
+    })
   }
+  get username(){
+    return this.CreateUser.get('username');
+    
+  }
+  get email(){
+    return this.CreateUser.get('email');
+  }
+ 
+  existingUsername(initialUsername:string = " "):AsyncValidatorFn{
+    return (control : AbstractControl
+      ):
+      | Promise<{ [key: string]: any } | null>
+      | Observable<{ [key: string]: any } | null> => {
+        return this.employeeService.CheckUsername(control.value).pipe(debounceTime(500),take(1),map(username=>
+        {
+            if(username.body.toString().length>0 ) return  of({"error": username.body.toString()}) ;
+          
+          return null;
+        }))
+          
+      }
+  
 }
+existingEmail(initialEmail:string = " "):AsyncValidatorFn{
+  return (control : AbstractControl
+    ):
+    | Promise<{ [key: string]: any } | null>
+    | Observable<{ [key: string]: any } | null> => {
+      return this.employeeService.CheckEmail(control.value).pipe(debounceTime(500),take(1),map(email=>
+      { 
+        console.log(email.body.toString());
+          if(email.body.toString().length>0 ) return  of({"error": email.body.toString()}) ;
+        
+        return null;
+      }))
+        
+    }
+
+}
+ 
+}
+

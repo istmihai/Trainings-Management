@@ -1,52 +1,56 @@
-<mat-card>
-    <mat-card-title>Add Training</mat-card-title>
+
+    <h2 mat-dialog-title>Add Training</h2>
+    <mat-dialog-content class="mat-typography">
+
     <form action="" [formGroup]="TrainingForm">
-      <p>
+      
         <mat-form-field appearance="standard">
           <mat-label>Title</mat-label>
           <input type="text" formControlName="Title" matInput >
     
         </mat-form-field>
-    </p>
-        <p>
+   
             <mat-form-field appearance="standard">
               <mat-label>Description</mat-label>
               <input formControlName="Description" matInput >
            
             </mat-form-field>
-        </p>
+        <p></p>
         
       
-        <p>
+        
             <mat-form-field appearance="standard">
               <mat-label>Status</mat-label>
               <input type="text" formControlName="Status" matInput >
             </mat-form-field>
-        </p>
-        <p>
-        <mat-form-field color="accent" appearance="fill">
-          <mat-label>Start Date</mat-label>
-          <input matInput [matDatepicker]="picker1" formControlName="StartDate">
-          <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
-          <mat-datepicker #picker1></mat-datepicker>
-        </mat-form-field>
-      </p>
-        <p>
-          <mat-form-field color="accent" appearance="fill">
-            <mat-label>End Date</mat-label>
-            <input matInput [matDatepicker]="picker2" formControlName="EndDate">
-            <mat-datepicker-toggle matSuffix [for]="picker2" ></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field>
-          
-        </p>
-        <p>
+        
+      
+        
             <mat-form-field appearance="standard">
               <mat-label>Location</mat-label>
               <input type="text" formControlName="Location" matInput >
-        
             </mat-form-field>
-        </p>
-        <button mat-button  (click)="AddTraining()">Add Training</button>
+        <div></div>
+        
+          <mat-form-field color="primary" appearance="standard">
+            <mat-label>Start Date</mat-label>
+            <input matInput [matDatepicker]="picker1" formControlName="StartDate">
+            <mat-datepicker-toggle matSuffix [for]="picker1" ></mat-datepicker-toggle>
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+       
+            <mat-form-field  color="primary" appearance="standard">
+              <mat-label>End Date</mat-label>
+              <input matInput [matDatepicker]="picker2" formControlName="EndDate">
+              <mat-datepicker-toggle matSuffix [for]="picker2" ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+            
+          
     </form>
-    </mat-card>
+          </mat-dialog-content>
+          <mat-dialog-actions align="end">
+            <button mat-stroked-button color="warn" mat-dialog-close>Cancel <mat-icon>cancel</mat-icon> </button>
+
+        <button mat-raised-button [mat-dialog-close]="true"  [disabled]="!TrainingForm.valid" (click)="AddTraining()">Add Training</button>
+          </mat-dialog-actions>

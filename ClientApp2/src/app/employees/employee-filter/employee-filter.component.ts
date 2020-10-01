@@ -1,10 +1,14 @@
-import { Component, OnInit, Output ,EventEmitter} from '@angular/core';
+import { Component, OnInit, Output ,EventEmitter, Input} from '@angular/core';
 import { FormControl, FormBuilder } from '@angular/forms';
 import { Observable, BehaviorSubject, combineLatest } from 'rxjs';
 import { startWith, map, take, switchMap } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Employee } from 'src/app/shared/employee.model';
 import { emailVerified } from '@angular/fire/auth-guard';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { EmployeeAddComponent } from '../employee-add/employee-add.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EmployeeSnackbarComponent } from '../employee-snackbar/employee-snackbar.component';
 
 @Component({
   selector: 'app-employee-filter',
@@ -13,7 +17,7 @@ import { emailVerified } from '@angular/fire/auth-guard';
 })
 export class EmployeeFilterComponent implements OnInit {
 
-  constructor(private fb:FormBuilder,private db:AngularFirestore){
+  constructor(private _snackBar:MatSnackBar, private fb:FormBuilder,private dialog:MatDialog, private db:AngularFirestore){
     this.db.collection("EmployeesFilter").doc<any>("Name").valueChanges().subscribe(
       data=>{this.nameOptions=data.Name
       console.log(data.Name);}
@@ -46,10 +50,9 @@ export class EmployeeFilterComponent implements OnInit {
   }
   @Output() Employees$ = new EventEmitter<Observable<Employee[]>>();
   //Employees$: Observable<Employee[]>;
-  nameFilter$: BehaviorSubject<string|null>;
-  usernameFilter$: BehaviorSubject<string|null>;
-  mailFilter$: BehaviorSubject<string|null>;
-  
+ 
+  @Input() showButton:boolean=true;
+
   nameOptions: string[]=[];
   filtredNameOptions: Observable<string[]>;
   emailOptions: string[]=[];
@@ -93,14 +96,29 @@ export class EmployeeFilterComponent implements OnInit {
             this.db.collection<Employee>("Employees",ref=>{
             
             let query : firebase.firestore.Query=ref;
-            if(this.name.value){ query=query.where('name',"==",this.name.value)};
+            if(this.name.value){ query=query.where('Firstname',"==",this.name.value.split(' ')[0])};
+            if(this.name.value){ query=query.where('Lastname',"==",this.name.value.split(' ')[1])};
             if(this.username.value){query=query.where('Username',"==",this.username.value)};
             if(this.email.value){query=query.where('Email',"==",this.email.value)};
             return query;
-          }).valueChanges()
+          }).valueChanges({"idField":"Id"})
           )
         
       
   }
+  openAddDialog(){
+    const dialogConfig = new MatDialogConfig();
 
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    const dialogRef=this.dialog.open(EmployeeAddComponent, dialogConfig); 
+    dialogRef.afterClosed().subscribe(data=>
+      {if(data==="Succes")  this.openSnackBar()}
+      )
+  }
+  openSnackBar() {
+    this._snackBar.openFromComponent(EmployeeSnackbarComponent, {
+      duration: 3 * 1000,
+    });
+  }
 }

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using TrainingManagement.FirestoreLogger;
 using TrainingManagement.Interfaces;
 using TrainingManagement.Models;
 using static TrainingManagement.RandomCode;
@@ -15,24 +17,41 @@ namespace TrainingManagement.Controllers
     {
         private readonly IFirestore _firestore;
         private readonly IEmailSender _emailSender;
-        public AuthentificationController(IFirestore firestore, IEmailSender emailSender)
+        private readonly ILogger _logger;
+
+        public AuthentificationController(IFirestore firestore, IEmailSender emailSender,ILogger<AuthentificationController> logger)
         {
             _firestore = firestore;
             _emailSender = emailSender;
-
+            _logger = logger;
 
         }
 
         [HttpPost("api/login")]
         public async Task<ActionResult> Login([FromQuery] string request)
         {
-           
+            try
+            {
                 var token = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(request);
-               if( token.Claims.TryGetValue("Admin", out var x))
-             
-                this.HttpContext.Session.SetString("Role","Admin");
+                if (token.Claims.TryGetValue("Admin", out var x))
+                {
+                    this.HttpContext.Session.SetString("Uid", token.Uid);
+                    this.HttpContext.Session.SetString("Role", "Admin");
+                }
+                else
+                {
+                    this.HttpContext.Session.SetString("Uid", token.Uid);
+                    this.HttpContext.Session.SetString("Role", "Employee");
+                }
+                _logger.LogInformation(FirestoreLoggerEvents.Login, "User {id} logged in at {time}", token.Uid, DateTime.Now);
+                    
                 return Ok();
-           
+                
+            }
+            catch
+            {
+                return BadRequest();
+            }
         }
 
         [HttpGet("api/verifyEmail")]
@@ -85,24 +104,35 @@ namespace TrainingManagement.Controllers
         [HttpPost("api/newpassword")]
         public async Task<ActionResult> NewPassword(NewPassword newPassword)
         {
-            var FireUser = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(newPassword.Email);
-            var codeRef = await _firestore.GetFirestoreDb().Collection("ActivationCode").Document(FireUser.Uid).GetSnapshotAsync();
-            var code = codeRef.ConvertTo<PasswordCode>();
-
-            if ( String.Equals(newPassword.Code, code.Code)&& (DateTime.UtcNow-code.RequestTime)<TimeSpan.FromHours(1))
+            try
             {
-                UserRecordArgs userRecord = new UserRecordArgs()
+                var FireUser = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(newPassword.Email);
+                var codeRef = await _firestore.GetFirestoreDb().Collection("ActivationCode").Document(FireUser.Uid).GetSnapshotAsync();
+                var code = codeRef.ConvertTo<PasswordCode>();
+
+                if (String.Equals(newPassword.Code, code.Code) && (DateTime.UtcNow - code.RequestTime) < TimeSpan.FromHours(1))
                 {
-                    Uid=FireUser.Uid,
-                    Password = newPassword.Password,
-                    EmailVerified = true,
-                    Disabled = false
+                    UserRecordArgs userRecord = new UserRecordArgs()
+                    {
+                        Uid = FireUser.Uid,
+                        Password = newPassword.Password,
+                        EmailVerified = true,
+                        Disabled = false
 
 
-                };
-                await FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecord);
+                    };
+                    await FirebaseAuth.DefaultInstance.UpdateUserAsync(userRecord);
+                    _logger.LogInformation(FirestoreLoggerEvents.NewPassword, "User {uid} changed his password at {time}", FireUser.Uid, DateTime.Now);
+
+                }
+                return Ok();
             }
-        return Ok();
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+           
         }
 
     }

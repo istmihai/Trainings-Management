@@ -6,6 +6,7 @@ export interface Employee{
     Email: string;
     Firstname:string;
     Lastname:string;
+    Departament:string;
     Birthdate:firestore.Timestamp;
     PhotoUrl:string;
     Role:string;

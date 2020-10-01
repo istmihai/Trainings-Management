@@ -1,0 +1,53 @@
+<form action="" [formGroup]="TrainingFilter">
+    <mat-form-field>
+<input type="text"
+             formControlName="Title"  
+             placeholder="Title"
+             aria-label="Number"
+             matInput
+             [matAutocomplete]="autoTitle">
+      <mat-autocomplete #autoTitle="matAutocomplete">
+        <mat-option *ngFor="let option of filtredTitleOptions | async" [value]="option">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
+  
+    </mat-form-field>
+
+    <mat-form-field>
+        <input type="text"
+                     formControlName="Location"  
+                     placeholder="Location"
+                     aria-label="Number"
+                     matInput
+                     [matAutocomplete]="autoLocation">
+              <mat-autocomplete #autoLocation="matAutocomplete">
+                <mat-option *ngFor="let option of filtredLocationsOptions | async" [value]="option">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
+          
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Status</mat-label>
+                <mat-select formControlName="Status" >
+                  <mat-option *ngFor="let status of StatusOptions" [value]="status">{{status}}</mat-option>
+                </mat-select>
+                    </mat-form-field>
+                
+                    <mat-form-field class="date-picker" appearance="standard">
+                        <mat-label>Choose a date</mat-label>
+                        <input matInput formControlName="StartDate" [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker" 
+                        #searchDate startView="year"
+                        ></mat-datepicker-toggle>
+        
+                        <mat-datepicker #picker></mat-datepicker>
+                      </mat-form-field> 
+
+                     
+                  
+                      <button mat-stroked-button color="primary" (click)="ApplyFilter()" >Apply Filter <mat-icon>search</mat-icon> </button>
+                      <button mat-stroked-button color="primary" (click)="AddTraining()" >Add Trainings <mat-icon>note_add</mat-icon> </button>
+
+                    </form>

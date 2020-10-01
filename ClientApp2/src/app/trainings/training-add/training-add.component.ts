@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { TrainingService } from 'src/app/shared/training.service';
 import { HttpClient } from '@angular/common/http';
 import { Training } from 'src/app/shared/training.model';
@@ -13,11 +13,11 @@ export class TrainingAddComponent implements OnInit {
 
   training:Training;
   TrainingForm= this.fb.group({
-    Title:[''],
-    Description:[''],
-    StartDate:[''],
-    EndDate:[''],
-    Location:[''],
+    Title:['',Validators.required],
+    Description:['',Validators.required],
+    StartDate:['',Validators.required],
+    EndDate:['',Validators.required],
+    Location:['',Validators.required],
     Status:[''],
     Document:['']
 
@@ -27,7 +27,7 @@ export class TrainingAddComponent implements OnInit {
   AddTraining(){
     
     this.training=this.TrainingForm.value;
-    this.trainingService.CreateTraining(this.training);
+    this.trainingService.CreateTraining(this.training).subscribe();
   }
   ngOnInit(): void {
   }

@@ -8,14 +8,24 @@
       <!-- Id Column -->
       <ng-container matColumnDef="email">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-        <td mat-cell *matCellDef="let row">{{row.Email}}</td>
+        <td  mat-cell *matCellDef="let row">{{row.Email}}
+          <br>
+       
+        
       </ng-container>
      
+      <ng-container matColumnDef="departament">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Departament</th>
+        <td  mat-cell *matCellDef="let row">{{row.Departament}}
+          <br>
+       
+        
+      </ng-container>
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
 
           <td mat-cell *matCellDef="let row">
-            <button mat-stroked-button (click)="Edit(row)" color="primary">Edit</button>   
+            <button mat-stroked-button (click)="openEditDialog(row)" color="primary">Edit <mat-icon>edit</mat-icon> </button>   
 
           </td>
 
@@ -24,7 +34,16 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
 
           <td mat-cell *matCellDef="let row">
-            <button mat-stroked-button color="warn" (click)="Delete(row)" >Delete</button>   
+            <button mat-stroked-button color="warn" (click)="openDeleteDialog(row)" > Delete <mat-icon>delete</mat-icon> </button>   
+
+          </td>
+
+        </ng-container>
+        <ng-container matColumnDef="trainings">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+
+          <td mat-cell *matCellDef="let row">
+            <button mat-stroked-button color="primary" (click)="navigateTrainings(row)"  > Trainings  <mat-icon>bar_chart</mat-icon> </button>   
 
           </td>
 
@@ -34,9 +53,17 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
         <td mat-cell *matCellDef="let row">{{row.Username}}</td>
       </ng-container>
-  
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      <ng-container matColumnDef="firstname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+        <td mat-cell *matCellDef="let row">{{row.Firstname}}</td>
+      </ng-container>
+      <ng-container matColumnDef="lastname">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+        <td mat-cell *matCellDef="let row">{{row.Lastname}}</td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns">text</tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;">text1</tr>
+      
     </table>
   
     <mat-paginator #paginator

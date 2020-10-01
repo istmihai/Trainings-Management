@@ -1,0 +1,10 @@
+.filters{
+    display : flex;
+}
+.mat-card{
+    display:flex;
+    flex-direction: column;
+}
+.full-width-table {
+    width: 100%;
+  }

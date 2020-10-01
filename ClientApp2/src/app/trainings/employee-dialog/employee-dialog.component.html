@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>Add New </h2>
+<mat-dialog-content>
+  
+    <div class="mat-elevation-z8">
+        <div class="filter">
+          <app-employee-filter (Employees$)="receiveEmployees($event)" ></app-employee-filter>
+      
+        </div>
+      
+          <table mat-table class="full-width-table"  [dataSource]="dataSource" matSort aria-label="Elements">
+            <!-- Id Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+              <td  mat-cell *matCellDef="let row">{{row.Email}}
+                <br>
+             
+              
+            </ng-container>
+            <ng-container matColumnDef="select">
+                <th mat-header-cell *matHeaderCellDef>
+                  <mat-checkbox color="primary" (change)="$event ? masterToggle() : null"
+                                [checked]="selection.hasValue() && isAllSelected()"
+                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                [aria-label]="checkboxLabel()">
+                  </mat-checkbox>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                  <mat-checkbox  color="primary" (click)="$event.stopPropagation()"
+                                (change)="$event ? selection.toggle(row) : null"
+                                [checked]="selection.isSelected(row)"
+                                [aria-label]="checkboxLabel(row)">
+                  </mat-checkbox>
+                </td>
+              </ng-container>
+            
+              
+            <!-- Name Column -->
+            <ng-container matColumnDef="username">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+              <td mat-cell *matCellDef="let row">{{row.Username}}</td>
+            </ng-container>
+            <ng-container matColumnDef="firstname">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+              <td mat-cell *matCellDef="let row">{{row.Firstname}}</td>
+            </ng-container>
+            <ng-container matColumnDef="lastname">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+              <td mat-cell *matCellDef="let row">{{row.Lastname}}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns">text</tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;">text1</tr>
+            
+          </table>
+        
+          <mat-paginator #paginator
+              
+              [pageIndex]="0"
+              [pageSize]="2"
+              [pageSizeOptions]="[2, 3, 100, 250]">
+          </mat-paginator>
+        </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-stroked-button (click)="close()" color="warn" >  Cancel <mat-icon>cancel</mat-icon> </button>
+    <button mat-stroked-button (click)="test()" color="primary"> Add <mat-icon>add</mat-icon> </button>
+</mat-dialog-actions>

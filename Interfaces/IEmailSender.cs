@@ -11,6 +11,7 @@ namespace TrainingManagement.Interfaces
     {
         Task SendActivation(Employee user ,string code);
         Task SendInvitation(Employee emp);
-     
+        Task TrainingEditNotification(IEnumerable<Employee> employees, Training training);
+
     }
 }

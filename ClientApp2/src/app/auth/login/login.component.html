@@ -1,86 +1,102 @@
-<div class="container">
-<mat-horizontal-stepper >
-    <mat-step  [stepControl]="EmailForm" label="" state="lock" errorMessage="Email is required.">
-        <div class="form">
+
+     <header>
+<div class="mat-h1">   Training Matrix</div>   
+  </header>
+
+ <div class="container" *ngIf="!hidden">
+    
+    <mat-card>
             <form  class="form" [formGroup]="EmailForm" action="">
         
-                <mat-card>
-                    <mat-card-title>Authentification</mat-card-title>
-                    <p>
+                
+                    <mat-card-title>Training Matrix</mat-card-title>
+                    <mat-card-subtitle>Sign in to Training Matrix</mat-card-subtitle>
+                    <mat-card-content>
                 <mat-form-field appearance="standard">
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput >
+                    <mat-error *ngIf="email.invalid && email.dirty"> Introdu o adresa de mail valida !</mat-error>
                   <mat-icon matSuffix   >email</mat-icon>
                   <mat-hint>Enter email</mat-hint>
                 </mat-form-field>
-                    </p>
-                    <button class="nextButton"  mat-raised-button (click)="VerifyEmail()"  matStepperNext>Next</button>
+                <p style="float:right; padding:10px; color:#009999">Forgot password ?</p>
+            </mat-card-content>
+                    <mat-card-actions>
+                        <button   class="nextButton"  mat-raised-button (click)="VerifyEmail()"  >Next</button>
 
-                </mat-card>
+                    </mat-card-actions>
+            
+
             </form>
-        </div>
-        
-    </mat-step>
-   <div *ngIf="UserActivated">
-    <mat-step [stepControl]="PasswordForm" label="" state="lock" errorMessage="Password is required.">
-           <div class="form"> 
+        </mat-card>
+
+</div>
+        <div class="container" *ngIf="UserActivated && hidden">
+    
+          
                <form  class="form" [formGroup]="PasswordForm" action="">
         
                 <mat-card>
-                    <mat-card-title>Enter password</mat-card-title>
-                    <p>
-                <mat-form-field appearance="standard">
-                  <mat-label>password</mat-label>
-                  <input type="password"   formControlName="password" matInput >
-                  <mat-icon matSuffix   >lock</mat-icon>
-                  <mat-hint>Password</mat-hint>
+                    <mat-card-title>Training Matrix</mat-card-title>
+                    <mat-card-subtitle>Sign in to Training Matrix</mat-card-subtitle>
+                    <mat-card-content>
+
+                        <mat-error *ngIf="!passwordValid">Password is not correct !</mat-error>
+                         <mat-form-field appearance="standard">
+                  
+                    <mat-label>password</mat-label>
+                    <input type="password"   formControlName="password" matInput >
+                    <mat-icon matSuffix   >lock</mat-icon>
+                  
                 </mat-form-field>
-                    </p>
-                    <button class="forgotButton"  mat-raised-button  matStepperNext>Forgot password</button>
-                    <button class="loginButton" (click)="Login()" mat-raised-button  matStepperNext>Login</button>
-    
+            </mat-card-content>
+                <mat-card-actions>
+                    <button class="loginButton" (click)="Login()" mat-raised-button  >Sign In</button>
+
+                </mat-card-actions>
+
                 </mat-card>
             </form>
-        </div>
-    </mat-step>
-     </div>
-     <div *ngIf="!UserActivated">
-    <mat-step [stepControl]="NewPassword">
-        <form  class="form" [formGroup]="NewPassword" action="">
+            
+        </div> 
 
-            <mat-card>
-                <br>
-                <button class="nextButton"  mat-raised-button  matStepperNext>Request code</button>
 
-                <mat-card-title>Activate Account</mat-card-title>
-                <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Code</mat-label>
-              <input formControlName="Code" matInput >
-             
-              <mat-hint>Enter Code</mat-hint>
-            </mat-form-field>
-        </p>
-        <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Password</mat-label>
-              <input type="password"  formControlName="Password" matInput>
-            </mat-form-field>
-        </p>
-        <p>
-            <mat-form-field appearance="standard">
-              <mat-label> Confirm Password</mat-label>
-              <input type="password"  matInput>
-            </mat-form-field>
-        </p>
-            <div class="button-group">
-                <button mat-button ></button>
+        <div class="container" style="padding-top:35px;" *ngIf="!UserActivated && hidden">
+            
                
-            </div>
-            <button mat-button (onclick)="GetNewPassword()" >Activate account</button>
-        </mat-card>
-            </form>
-    </mat-step>
-</div>
-</mat-horizontal-stepper>
-</div>
+        
+                    <mat-card>
+                        
+                        <mat-card-title>Training Matrix</mat-card-title>
+                        <mat-card-subtitle>Sign in to Training Matrix</mat-card-subtitle>
+                        <mat-card-content>
+                            <form  class="form" [formGroup]="NewPassword" action="">
+                    
+                            <mat-error *ngIf="CodeError">eroare</mat-error>
+                    <mat-form-field appearance="standard">
+                      <mat-label>Code</mat-label>
+                      <input formControlName="Code" matInput >
+                     
+                      <mat-hint>Enter Code</mat-hint>
+                    </mat-form-field>
+               
+                    <mat-form-field appearance="standard">
+                      <mat-label>Password</mat-label>
+                      <input type="password"  formControlName="Password" matInput>
+                    </mat-form-field>
+               
+                    <mat-form-field appearance="standard">
+                      <mat-label> Confirm Password</mat-label>
+                      <input type="password"  matInput>
+                    </mat-form-field>
+           
+                </form>
+                        </mat-card-content>
+                <mat-card-actions>
+                    <button mat-button (click)="GetNewPassword()" >Activate account</button>
+                    <button class="nextButton"  mat-raised-button (click)="RequestCode()" >Request code</button>
+                </mat-card-actions>
+             </mat-card>
+          </div>
+        
+ 

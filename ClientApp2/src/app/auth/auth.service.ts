@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { Employee } from '../shared/employee.model';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { EmailValidator } from '@angular/forms';
 import {Code } from './code'
 import { User } from 'firebase';
+import { promise } from 'protractor';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,18 +17,22 @@ export class AuthService {
     employee$:Observable<Employee | null>;
     role:Observable<boolean>;
   constructor(private auth:AngularFireAuth,private router:Router , private http:HttpClient,private db:AngularFirestore) { 
-    auth.setPersistence('session').then(()=>
+  //  auth.setPersistence('local').then(()=>
     this.employee$=this.auth.authState.pipe(
         switchMap(user=>{
           if(user){
-            return this.db.doc<Employee>(`Employees/${user.uid}`).valueChanges();
+            return this.db.doc<Employee>(`Employees/${user.uid}`).valueChanges().pipe(map (x=>{
+              let aux = x;
+              aux.Id = user.uid;
+              return aux;
+            }));
           }else{
             return of(null);
           }
           
         }
         )
-      ))
+      )//)
      this.role=this.auth.authState.pipe(
         switchMap(user=>
           user.getIdTokenResult().then(
@@ -51,18 +56,20 @@ export class AuthService {
    this.router.navigate(['/login'])});
    
   }
-  signIn(email:string,password:string){
-    this.auth.signInWithEmailAndPassword(email,password).then(()=>{
+ async signIn(email:string,password:string): Promise<boolean> {
+    
+   return this.auth.signInWithEmailAndPassword(email,password).then(()=>{
       this.auth.currentUser.then(user=>{
         user.getIdToken().then(
-          token=>this.http.post(`/api/login?request=${token}`,'').subscribe()
-        )
+          token=>{this.http.post(`/api/login?request=${token}`,'').subscribe()
+          console.log(token)})
     })
       this.router.navigate(['/'])
-
+      return true;
     }
-    );
- 
+    ).catch(function(error){
+        return false;
+    })
     
   }
   RequestCode(email:string){
@@ -77,13 +84,9 @@ export class AuthService {
       password :Password,
       code:recode,
       email:Email
-
     }
       
     
-    this.http.post<Code>(`api/newpassword`,ReqCode,{observe:'response'}).subscribe(res=>{
-      if(res.status==200) this.router.navigate(['login']);
-      else this.router.navigate(['newpass']);
-    });
+   return  this.http.post<Code>(`api/newpassword`,ReqCode,{observe:'response'});
 }
 }

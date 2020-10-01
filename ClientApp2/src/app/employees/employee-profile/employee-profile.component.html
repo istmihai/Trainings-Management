@@ -1,0 +1,56 @@
+
+  <mat-card class="employee">
+    <img mat-card-md-image src="{{profileUrl | async}}" >
+   <!-- <button mat-button *ngIf="user" (click)="fileInput.click()"><mat-icon>box</mat-icon> Change Profile picture</button>
+    <input  #fileInput *ngIf="user"  type='file' style="display: none;" (change)="ProfilePicture($event)">
+   -->
+   <span *ngIf="user">
+   <button (click)="fileInput.click()"  mat-button><mat-icon>portrait</mat-icon>
+    <input #fileInput type="file"  (change)="ProfilePicture($event)" style="display:none ;">
+    Change  </button> 
+   </span>
+   <mat-card-content>
+  <form action="" [formGroup]="EditEmployeeForm">
+    <div class="flexc">
+    <span>
+      <mat-form-field appearance="standard">
+        <mat-label>Username</mat-label>
+        <input type="text" formControlName="username" matInput >
+  
+      </mat-form-field>
+  </span>
+      <span>
+          <mat-form-field appearance="standard">
+            <mat-label>Email</mat-label>
+            <input formControlName="email" matInput >
+         
+          </mat-form-field>
+      </span>
+      <div>
+      <span>
+          <mat-form-field appearance="standard">
+            <mat-label>First Name</mat-label>
+            <input type="text" formControlName="firstname" matInput >
+          </mat-form-field>
+      </span>
+      <span>
+          <mat-form-field appearance="standard">
+            <mat-label>Last Name</mat-label>
+            <input type="text" formControlName="lastname" matInput >
+          </mat-form-field>
+      </span>
+    </div>
+      <p> 
+        <mat-form-field class="example-full-width" appearance="standard">
+          <mat-label>Birthdate</mat-label>
+          <input matInput formControlName="birthdate" [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        
+      </p>
+    </div>
+  </form>
+</mat-card-content>
+</mat-card>

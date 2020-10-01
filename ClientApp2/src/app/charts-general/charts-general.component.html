@@ -1,0 +1,76 @@
+
+<mat-card style="display: flex">
+    <ngx-charts-line-chart
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="single"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    (select)="test($event)">>
+</ngx-charts-line-chart>
+<div class="filters"> 
+    <form action="" [formGroup]="ChartsFilter">
+                <mat-form-field >
+                    <mat-label>Select Year</mat-label>
+                    <mat-select formControlName="Year"  (selectionChange)="GetData()" required>
+                      <mat-option>--</mat-option>
+                      <mat-option *ngFor="let option of Years" [value]="option">
+                        {{option}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field  style="padding: 5px">
+                    <mat-label>Select Departament</mat-label>
+                    <mat-select formControlName="Departament" required>
+                      <mat-option>--</mat-option>
+                      <mat-option *ngFor="let option of Departaments" [value]="option">
+                        {{option}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+    </form>
+</div>
+    <mat-card-actions>
+        <button mat-stroked-button (click)="DownloadRaport()" style="color:#009999">Download Report <mat-icon>get_app</mat-icon> </button>
+
+    </mat-card-actions>
+</mat-card>
+
+<table mat-table class="full-width-table"  [dataSource]="dataSource" matSort aria-label="Elements">
+    <!-- Id Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+      <td  mat-cell *matCellDef="let row">{{row.employee.Email}}
+      </ng-container>
+
+    <ng-container matColumnDef="username">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Username</th>
+      <td mat-cell *matCellDef="let row">{{row.employee.Username}}</td>
+    </ng-container>
+    <ng-container matColumnDef="firstname">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+      <td mat-cell *matCellDef="let row">{{row.employee.Firstname}}</td>
+    </ng-container>
+    <ng-container matColumnDef="lastname">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+      <td mat-cell *matCellDef="let row">{{row.employee.Lastname}}</td>
+    </ng-container>
+    <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let row"> {{row.status}}</td>
+      </ng-container>
+    <ng-container matColumnDef="training">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Training Name</th>
+        <td mat-cell *matCellDef="let row"> {{ trainingNames.get(row.trainingId) }}</td>
+      </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns">text</tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;">text1</tr>
+  
+  </table>

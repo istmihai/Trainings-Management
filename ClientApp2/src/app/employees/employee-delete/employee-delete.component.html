@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Delete Employee</h2>
+
+<mat-dialog-content >
+  
+<p>Are you sure you want to delete employee {{employee.Username}}</p>
+ 
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button mat-stroked-button color="primary" mat-dialog-close> No</button>
+    <button mat-stroked-button color="warn" [mat-dialog-close]="true" (click)="DeleteEmployee()" > Yes <mat-icon>delete</mat-icon> </button>
+</mat-dialog-actions>

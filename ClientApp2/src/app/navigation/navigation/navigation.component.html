@@ -1,24 +1,47 @@
+<div class="footer">text</div>
+
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'"
       [opened]="(isHandset$ | async) === false">
-    <mat-toolbar>Menu</mat-toolbar>
+    <mat-toolbar>  Training Matrix
+
+    </mat-toolbar>
     
     <mat-nav-list class="list" *ngIf="Admin">
-      
-      <a mat-list-item routerLink="/home">
-        <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon> Home</a>
-      <a mat-list-item routerLink="/trainings">Trainings</a>
-      <a mat-list-item routerLink="/training/add">Add Training</a>
-      <a mat-list-item routerLink="/employees" >Employees</a>
-      <a mat-list-item routerLink="/employee/add" >Add Employee</a>
+      <mat-card class="mat-elevation-z0 outline">
+        <img mat-card-md-image src="{{profileUrl | async}}" >
+        <mat-card-content *ngIf="Employee$ | async as Employee">
+         <p > {{Employee.Firstname }}  {{Employee.Lastname }}</p>
+          <p  *ngIf="Admin" style=" color: green; text-align: center;" > Admin</p>
+        </mat-card-content>
+      </mat-card>
+      <mat-divider></mat-divider>
+      <a mat-list-item routerLink="/dashboard">
+        <mat-icon aria-hidden="false" aria-label="Example home icon">dashboard</mat-icon>  Dashboard</a>
+      <a mat-list-item routerLink="/trainings"> <mat-icon>article </mat-icon>  Trainings</a>
+      <a mat-list-item routerLink="/employees" > <mat-icon>group </mat-icon>  Employees</a>
+     
+      <a mat-list-item routerLink="/raports"><mat-icon>show_chart</mat-icon>Reports</a>
 
-      <a mat-list-item (click)="signOut()" routerLink="/login">Logout</a>
+      <a mat-list-item routerLink="/{{id}}/profile" > <mat-icon>account_box</mat-icon>  Profile</a>
+
+      <a mat-list-item (click)="signOut()" routerLink="/login"> <mat-icon>logout</mat-icon> Logout</a>
     </mat-nav-list>
+
     <mat-nav-list class="list" *ngIf="!Admin">
-      <a mat-list-item routerLink="/home">Profile</a>
-      <a mat-list-item routerLink="/login">Logout</a>
+      <mat-card class="mat-elevation-z0 outline">
+        <img mat-card-md-image src="{{profileUrl | async}}" >
+        <mat-card-content *ngIf="Employee$ | async as Employee">
+         <p > {{Employee.Firstname }}  {{Employee.Lastname }}</p>
+          <p  *ngIf="Admin" style=" color: green; text-align: center;" > Admin</p>
+        </mat-card-content>
+      </mat-card>
+      <a mat-list-item routerLink="/{{id}}/profile"><mat-icon>account_box</mat-icon>Profile</a>
+      <a mat-list-item routerLink="/employee/{{id}}/trainings"><mat-icon>article</mat-icon>Trainings</a>
+
+      <a mat-list-item routerLink="/login"><mat-icon>logout</mat-icon>Logout</a>
 
     </mat-nav-list>
   </mat-sidenav>
@@ -32,8 +55,9 @@
         *ngIf="isHandset$ | async">
         <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
       </button>
-      <span>Trainings Management</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
+    
+
   </mat-sidenav-content>
 </mat-sidenav-container>

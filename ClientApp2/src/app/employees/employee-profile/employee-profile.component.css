@@ -1,0 +1,19 @@
+
+  .example-header-image {
+    background-size: cover;
+  }
+  .employee{
+    height: 92.25%;
+  }
+
+  .wrapper{
+    display: flex;
+    padding:5px;
+  }
+  .mat-form-field{
+    padding:5px;
+  }
+  .mat-card-avatar{
+    font-size: 64px;
+    width: 64px;
+  }

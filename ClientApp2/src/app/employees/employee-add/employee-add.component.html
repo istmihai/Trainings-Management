@@ -1,51 +1,70 @@
-<mat-card>
-    <mat-card-title>Add Employee</mat-card-title>
-    <form action="" [formGroup]="CreateUser">
-      <p>
-        <mat-form-field appearance="standard">
-          <mat-label>Username</mat-label>
-          <input type="text" formControlName="username" matInput >
-    
-        </mat-form-field>
-    </p>
-        <p>
+<h2 mat-dialog-title>Add Employee</h2>
+<mat-dialog-content class="mat-typography">
+        <form action="" [formGroup]="CreateUser">
+          <div class="flexc">
+          <span>
             <mat-form-field appearance="standard">
-              <mat-label>Email</mat-label>
-              <input formControlName="email" matInput >
-           
-            </mat-form-field>
-        </p>
+              <mat-label>Username</mat-label>
+              <input type="text" formControlName="username" matInput >
         
-        <p>
-            <mat-form-field appearance="standard">
-              <mat-label>First Name</mat-label>
-              <input type="text" formControlName="firstname" matInput >
             </mat-form-field>
-        </p>
-        <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Last Name</mat-label>
-              <input type="text" formControlName="lastname" matInput >
-            </mat-form-field>
-        </p>
-        <p>
-          <mat-form-field class="width" appearance="fill">
-            <mat-label>Choose a date</mat-label>
-            <input matInput formControlName="birthdate" [matDatepicker]="picker">
-            <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+        </span>
+            <span>
+                <mat-form-field appearance="standard">
+                  <mat-label>Email</mat-label>
+                  <input formControlName="email" matInput >
+               
+                </mat-form-field>
+            </span>
+            <div>
+            <span>
+                <mat-form-field appearance="standard">
+                  <mat-label>First Name</mat-label>
+                  <input type="text" formControlName="firstname" matInput >
+                </mat-form-field>
+            </span>
+            <span>
+                <mat-form-field appearance="standard">
+                  <mat-label>Last Name</mat-label>
+                  <input type="text" formControlName="lastname" matInput >
+                </mat-form-field>
+            </span>
+          </div>
+            <p> 
+              <mat-form-field class="example-full-width" appearance="standard">
+                <mat-label>Birthdate</mat-label>
+                <input matInput formControlName="birthdate" [matDatepicker]="picker">
+                <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
 
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-          
-        </p>
-        <p>
-            <mat-form-field appearance="standard">
-              <mat-label>Role</mat-label>
-              <input type="text" formControlName="role" matInput >
-        
-            </mat-form-field>
-        </p>
-        
-        <button mat-raised-button   (click)="AddUser()">Add Employee</button>
-    </form>
-    </mat-card>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              
+            </p>
+            <span>
+              <mat-form-field appearance="standard">
+                <mat-label>Departament</mat-label>
+                <input type="text" formControlName="departament" matInput >
+              </mat-form-field>
+          </span>
+            <p>
+              <mat-form-field appearance="standard">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role">
+                  <mat-option *ngFor="let role of roles" [value]="role">
+                    {{role}}
+                  </mat-option>
+                </mat-select>        
+              </mat-form-field>
+            </p>
+            
+           <div class="buttons">
+
+           </div>
+          </div>
+          </form>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+          <button mat-stroked-button  color="primary" [mat-dialog-close]="true" (click)="AddUser()" cdkFocusInitial>Add <mat-icon>save</mat-icon> </button>
+          <button mat-stroked-button color="warn" mat-dialog-close>Cancel <mat-icon>cancel</mat-icon> </button>
+        </mat-dialog-actions>
+

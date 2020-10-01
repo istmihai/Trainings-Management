@@ -10,41 +10,38 @@ import { observable, Observable } from 'rxjs';
 import { Employee } from '../shared/employee.model';
 import { toArray } from 'rxjs/operators';
 import { FormBuilder } from '@angular/forms';
+import { trainingInfo } from '../shared/trainingInfo.model';
+import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
+import { TrainingEditComponent } from './training-edit/training-edit.component';
+import { TrainingDeleteComponent } from './training-delete/training-delete.component';
 @Component({
   selector: 'app-training',
   templateUrl: './trainings.component.html',
   styleUrls: ['./trainings.component.css']
 })
-export class TrainingsComponent implements AfterViewInit ,OnInit {
+export class TrainingsComponent implements  OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns = ['title', 'description','startdate','enddate','employees','edit','delete'];
+  displayedColumns = ['title', 'description','startdate','enddate','status','employees','edit','delete'];
   selectedTraining:Training;
   show:boolean=false;
+  trainings:Observable<Training[]>;
   titleOptions:Observable<string[]>;
   users:Observable<Employee | Employee[]>;
   @ViewChild(MatTable) table: MatTable<Training>;
   @ViewChild(MatSort) sort: MatSort;
-  FiltersForm=this.fb.group(
-    {Title:[''],
-      Location:[''],
-      StartDate:[''],
-      EndDate:[''],
-      Status:['']
-  
-  
-  }
-  )
-  constructor(private db :AngularFirestore,private fb:FormBuilder, private router:Router,private trainingService:TrainingService) { }
   dataSource :MatTableDataSource<Training>;
-  ngAfterViewInit(): void {
+
+  constructor(public dialog:MatDialog, private db :AngularFirestore,private fb:FormBuilder, private router:Router,private trainingService:TrainingService) { 
     this.trainingService.GetTrainings().subscribe(data=>{
+      console.log(data);
       this.dataSource=new MatTableDataSource(data);
     })
   }
-  ngOnInit(){
-    
-  }
 
+  ngOnInit(){
+   
+  }
+ 
 
   trackByUid(index, item:Training) {
     return item.Id;
@@ -53,11 +50,47 @@ export class TrainingsComponent implements AfterViewInit ,OnInit {
     console.log(training.Id);
     this.trainingService.selectedTraining=training;
     
-    this.router.navigate(['trainings/edit']);
+    this.router.navigate(['training',training.Id]);
   }
   Delete(training:Training){
     
-    this.trainingService.DeleteTraining(training);
+    this.trainingService.DeleteTraining(training).subscribe();
   }
- 
+  openEditDialog(training:Training){
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data=training;
+    const dialogRef=this.dialog.open(TrainingEditComponent, dialogConfig); 
+    dialogRef.afterClosed().subscribe();
+    
+  }
+  
+  openDeleteTraining(training:Training){
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data=training;
+    const dialogRef=this.dialog.open(TrainingDeleteComponent, dialogConfig); 
+    dialogRef.afterClosed().subscribe(data=>{
+      
+      if(data) this.trainingService.DeleteTraining(training).subscribe();
+    });
+    
+  }
+  receiveTrainings($event){
+    this.trainings=$event;
+    this.trainings.subscribe(data=>{
+      this.dataSource=new MatTableDataSource(data);
+    })
+  }
+  StatusName(status:string){
+    return this.trainingService.GetStatusName(status);
+  }
+  navigateEmployees(training:Training){
+    this.router.navigate([`training/${training.Id}/employees`]);
+  }
+  
 }

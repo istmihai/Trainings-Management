@@ -23,5 +23,13 @@ namespace TrainingManagement.Models
         [FirestoreProperty] public string AccessLevel { get; set; }
         [FirestoreDocumentCreateTimestamp] public DateTime CreateDateTime { get; set; }
         [FirestoreDocumentUpdateTimestamp] public DateTime UpdatedTime { get; set; }
+
+        public override string ToString()
+        {
+            return $"Title,{Title} {Environment.NewLine}Description,{Description} {Environment.NewLine}End Date,{EndDate.ToShortDateString()} {Environment.NewLine}Start Date,{StartDate.ToShortDateString()} {Environment.NewLine} " +
+                $"Location,{Location},{Environment.NewLine}"+
+                $"Status,{Status},{Environment.NewLine}";
+        }
     }
+   
 }

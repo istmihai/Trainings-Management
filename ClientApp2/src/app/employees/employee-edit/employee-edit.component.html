@@ -1,37 +1,44 @@
-<div>
-    <mat-card>
-        <mat-card-title>Add Employee</mat-card-title>
+<h2 mat-dialog-title>Edit Employee</h2>
+<mat-dialog-content class="mat-typography">
         <form action="" [formGroup]="EditEmployeeForm">
-          <p>
+          <div class="flexc">
+          <span>
             <mat-form-field appearance="standard">
               <mat-label>Username</mat-label>
               <input type="text" formControlName="username" matInput >
         
             </mat-form-field>
-        </p>
-            <p>
+        </span>
+            <span>
                 <mat-form-field appearance="standard">
                   <mat-label>Email</mat-label>
                   <input formControlName="email" matInput >
                
                 </mat-form-field>
-            </p>
-            
-            <p>
+            </span>
+            <div>
+            <span>
                 <mat-form-field appearance="standard">
                   <mat-label>First Name</mat-label>
                   <input type="text" formControlName="firstname" matInput >
                 </mat-form-field>
-            </p>
-            <p>
+            </span>
+            <span>
                 <mat-form-field appearance="standard">
                   <mat-label>Last Name</mat-label>
                   <input type="text" formControlName="lastname" matInput >
                 </mat-form-field>
-            </p>
-            <p>
-              <mat-form-field class="example-full-width" appearance="fill">
-                <mat-label>Choose a date</mat-label>
+            </span>
+            <span>
+              <mat-form-field appearance="standard">
+                <mat-label>Departament</mat-label>
+                <input type="text" formControlName="departament" matInput >
+              </mat-form-field>
+          </span>
+          </div>
+            <p> 
+              <mat-form-field class="example-full-width" appearance="standard">
+                <mat-label>Birthdate</mat-label>
                 <input matInput formControlName="birthdate" [matDatepicker]="picker">
                 <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
 
@@ -40,17 +47,24 @@
               
             </p>
             <p>
-                <mat-form-field appearance="standard">
-                  <mat-label>Role</mat-label>
-                  <input type="text" formControlName="role" matInput >
-            
-                </mat-form-field>
+              <mat-form-field appearance="standard">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role">
+                  <mat-option *ngFor="let role of roles" [value]="role">
+                    {{role}}
+                  </mat-option>
+                </mat-select>        
+              </mat-form-field>
             </p>
             
-            <button mat-raised-button color="primary"(click)="UpdateUser()">Update Employee</button>
-        </form>
-        </mat-card>
+           <div class="buttons">
 
+           </div>
+          </div>
+          </form>
+        </mat-dialog-content>
+        <mat-dialog-actions align="end">
+          <button mat-stroked-button  color="primary" [mat-dialog-close]="true" (click)="UpdateUser()" cdkFocusInitial>Save <mat-icon>save</mat-icon> </button>
+          <button mat-stroked-button color="warn" mat-dialog-close>Cancel <mat-icon>cancel</mat-icon> </button>
+        </mat-dialog-actions>
 
-
-</div>

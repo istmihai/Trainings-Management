@@ -21,8 +21,9 @@ export class TrainingComponent implements AfterViewInit,OnInit {
   @Input() trainingId:string;
    training:Training;
   statusList:string[]=[];
-  constructor(private db:AngularFirestore ,private trainingService:TrainingService,private router:Router) { 
-      console.log(2);        
+  constructor(private db:AngularFirestore ,private trainingService:TrainingService,private router:Router) {
+    console.log(this.trainingId) 
+  
       
   }
   employees$:Observable<Employee[]>
@@ -33,8 +34,7 @@ export class TrainingComponent implements AfterViewInit,OnInit {
 
     }
     ngOnInit(){
-      console.log(1);
-              this.employees$=this.trainingService.GetEmplolyees(this.trainingId);
+        /*      this.employees$=this.trainingService.GetEmplolyees(this.trainingId);
               this.trainingService.GetEmplolyees(this.trainingId).subscribe(data=>{this.info=data
               console.log(data);
               data.forEach(element => {
@@ -43,7 +43,7 @@ export class TrainingComponent implements AfterViewInit,OnInit {
               });
               });
              
-            
+            */
         
       }
     

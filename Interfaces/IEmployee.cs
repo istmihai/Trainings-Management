@@ -9,9 +9,9 @@ namespace TrainingManagement.Interfaces
    public interface IEmployee
     {
         Task AddEmployee(Employee employee);
-        Task DeleteEmployee(string id);
+        Task DeleteEmployee(string employeeId);
         Task EditEmployee(Employee employee);
-
+        Task ChangePhoto(string employeeId, string code);
         Task<bool> ValidateUsername(string username);
      //   IEnumerable<Employee> GetEmployees(EmployeeFilter filter);
     }

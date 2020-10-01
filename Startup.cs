@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using TrainingManagement.FirestoreLogger;
 using TrainingManagement.Interfaces;
 using TrainingManagement.Services;
 using TrainingsManagament.Configs;
@@ -38,9 +40,10 @@ namespace TrainingManagement
             {
                 Credential = GoogleCredential.FromFile(@"C:\Users\Mihai-AlexandruIstra\Downloads\trainingmanagement-5cda0-firebase-adminsdk-j780k-902a921430.json"),
 
-            });           
+            });
+            services.AddLocalization();
             services.AddScoped<IFirestore, FirestoreService>();
-            services.AddScoped<ITraining>(x => new TrainingsService(x.GetService<IFirestore>()));
+            services.AddScoped<ITraining>(x => new TrainingsService(x.GetService<IFirestore>(),x.GetService<IEmailSender>()));
             services.AddScoped<IEmployee>(x => new EmployeeService(x.GetService<IFirestore>()));
             services.Configure<SmtpConfig>(Configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IEmailSender, EmailService>();
@@ -49,7 +52,7 @@ namespace TrainingManagement
    
 
             // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
@@ -77,7 +80,8 @@ namespace TrainingManagement
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
             });
-
+            loggerFactory.AddFirestoreLogger(config=> { } 
+            );
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
