@@ -50,7 +50,7 @@ export class EmployeeFilterComponent implements OnInit {
   }
   @Output() Employees$ = new EventEmitter<Observable<Employee[]>>();
   //Employees$: Observable<Employee[]>;
- 
+  
   @Input() showButton:boolean=true;
 
   nameOptions: string[]=[];

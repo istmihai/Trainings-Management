@@ -1,4 +1,4 @@
-import { Component, OnInit, Output ,EventEmitter} from '@angular/core';
+import { Component, OnInit, Output ,EventEmitter, Input} from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
@@ -15,7 +15,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 })
 export class TrainingFilterComponent implements OnInit {
  @Output() Trainings$ = new EventEmitter<Observable<Training[]>>();
-
+@Input() showButton:boolean=false;
   constructor( private fb:FormBuilder,private db:AngularFirestore,public dialog:MatDialog) { 
     this.db.collection("TrainingsFilter").doc<any>("Location").valueChanges().subscribe(
       data=>{this.LocationOptions=data.Location

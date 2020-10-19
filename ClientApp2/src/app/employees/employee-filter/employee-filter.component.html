@@ -43,7 +43,7 @@
                   
                     </mat-form-field>
                       <button mat-stroked-button color="primary" (click)="ApplyFilter()" >Apply Filter <mat-icon>search</mat-icon> </button>
-                      <button mat-stroked-button  color="primary" (click)="openAddDialog()" >Add Employee <mat-icon>person_add</mat-icon></button>
+                      <button mat-stroked-button  *ngIf="showButton" color="primary" (click)="openAddDialog()" >Add Employee <mat-icon>person_add</mat-icon></button>
                    
 
                   </form>

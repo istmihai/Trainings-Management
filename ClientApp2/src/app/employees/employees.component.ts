@@ -23,7 +23,7 @@ export class EmployeesComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatTable) table: MatTable<Employee>;
-  displayedColumns = [ 'firstname','lastname','username','email','trainings','edit','delete'];
+  displayedColumns = [ 'firstname','lastname','username','email','departament','trainings','edit','delete'];
   employees:Observable<Employee[]>;
   dataSource:MatTableDataSource<Employee>
   durationInSeconds = 3;

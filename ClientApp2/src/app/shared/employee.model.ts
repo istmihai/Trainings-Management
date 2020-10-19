@@ -1,6 +1,7 @@
 import { firestore } from 'firebase';
 
 export interface Employee{
+    [x: string]: any;
     Id:string;
     Username: string;
     Email: string;

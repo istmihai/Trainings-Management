@@ -103,6 +103,7 @@ return null;
         Stats.update(statusDate,admin.firestore.FieldValue.increment(1));
       return null;
     });
+    
     exports.updateTraining2 = functions.region('europe-west3').firestore
     .document('Trainings/{trainingId}')
     .onUpdate( async(change, context) => {
@@ -123,6 +124,7 @@ return null;
         console.log("test");
       return null;
     });
+
     exports.deleteTraining2 = functions.region('europe-west3').firestore
     .document('Trainings/{trainingId}')
     .onDelete( async(change, context) => {

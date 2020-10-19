@@ -13,7 +13,6 @@ export class TrainingDeleteComponent implements OnInit {
 this.training=data;
   }
 DeleteTraining()
-
 {
   this.dialogRef.close("Succes");
 }
