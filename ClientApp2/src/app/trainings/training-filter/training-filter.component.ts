@@ -82,10 +82,14 @@ get EndDate(){
       if(this.Title.value){ query=query.where('Title',"==",this.Title.value)};
       if(this.Location.value){query=query.where('Location',"==",this.Location.value)};
       if(this.Status.value){query=query.where('Status',"==",this.Status.value)};
-      if(this.StartDate.value){{query=query.where('StartDate',"<=",this.StartDate.value )};}
-      return query;
+      if(this.StartDate.value){{query=query.where('StartDate',"<=", new Date( this.StartDate.value.getFullYear(),this.StartDate.value.getMonth()+1));
+                                  query=query.where('StartDate',">=",new Date( this.StartDate.value.getFullYear(),this.StartDate.value.getMonth()))}}
+                                  console.log(query);
+                                  return query;
     }).valueChanges({"idField":"Id"})
-    )  }
+    ) 
+   
+  }
   AddTraining(){
     
       const dialogConfig = new MatDialogConfig();

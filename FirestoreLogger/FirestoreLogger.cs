@@ -7,6 +7,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrainingManagement.Interfaces;
 using TrainingManagement.Services;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 
 namespace TrainingManagement.FirestoreLogger
 {
@@ -36,15 +39,22 @@ namespace TrainingManagement.FirestoreLogger
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            Dictionary<string, object> logEvent = new Dictionary<string, object>()
+            string msg = formatter(state,exception);
+           LogEntry log = JsonSerializer.Deserialize<LogEntry>(msg);
+            log.TimeStamp = Timestamp.GetCurrentTimestamp();
+            Dictionary<string, object> test = new Dictionary<string, object>()
             {
-                {"logLevel",logLevel.ToString() },
-                { "eventId",eventId.Id},
-                {"date",DateTime.UtcNow },
-                {"eventLog",formatter(state,exception) }
+                {"Action", log.Action},
+                {"Message",log.Message },
+                {"TimeStamp",Timestamp.GetCurrentTimestamp() },
+                {"ObjectId",log.LogInfo  }
+          
             };
-            _firestoreClient.Collection("Events").AddAsync(logEvent);
+         //   _firestoreClient.Collection("Events").AddAsync(log);
+            _firestoreClient.Collection("Events").AddAsync(test);
+
         }
+    
 
     }
 }

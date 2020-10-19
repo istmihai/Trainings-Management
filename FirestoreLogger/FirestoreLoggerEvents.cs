@@ -7,14 +7,13 @@ namespace TrainingManagement.FirestoreLogger
 {
     public class FirestoreLoggerEvents
     {
-        public const int Login = 1000;
-        public const int NewPassword = 1001;
-        public const int CreateTraining = 1010;
-        public const int DeleteTraining = 1011;
-        public const int EditTraining = 1012;
-        public const int RemoveEmployee = 1014;
-        public const int AddEmployee = 1013;
-        public const int AddDocument = 1014;
-        public const int LoginFailed = 4000;
+        public const string Login = "Login";
+        public const string NewPassword = "New Password";
+        public const string CreateTraining = "Training Create";
+        public const string DeleteTraining = "Training Delete";
+        public const string EditTraining = "Training Edit";
+        public const string RemoveEmployee = "Employee Delete";
+        public const string AddEmployee = "Employee Add";
+        public const string AddDocument = "Document Add";
     }
 }

@@ -20,6 +20,7 @@ namespace TrainingManagement
             Host.CreateDefaultBuilder(args).ConfigureLogging(
                 logging =>
                 {
+                    
                     logging.ClearProviders();
                 })
                 .ConfigureWebHostDefaults(webBuilder =>

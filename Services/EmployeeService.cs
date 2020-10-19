@@ -77,6 +77,12 @@ namespace TrainingManagement.Services
             await FirebaseAuth.DefaultInstance.DeleteUserAsync(employeeId);
         }
 
+        public async Task DeleteMessage(string messagesId, string employeeId)
+        {
+            await _firestoreDb.GetFirestoreDb().Document($"Employees/{employeeId}/Messages/{messagesId}").DeleteAsync();
+        
+        }
+
         public async Task EditEmployee(Employee employee)
         {
             var auxUser = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(employee.Email);
@@ -99,27 +105,36 @@ namespace TrainingManagement.Services
            
         }
 
-     /*   public IEnumerable<Employee> GetEmployees(EmployeeFilter filter)
+        public async Task MarkRead(string messagesId, string employeeId)
         {
-           foreach(Employee employee in Employees)
+            Dictionary<string, object> update = new Dictionary<string, object>()
             {
-                if (!String.IsNullOrEmpty(filter.Username))
-                    if (!employee.Username.Contains(filter.Username)) continue;
-                if (!String.IsNullOrEmpty(filter.FirstName))
-                    if (!employee.Firstname.Contains(filter.FirstName)) continue;
-                if (!String.IsNullOrEmpty(filter.LastName))
-                    if (!employee.Lastname.Contains(filter.LastName)) continue;
-                if (!String.IsNullOrEmpty(filter.Username))
-                    if (!employee.Username.Contains(filter.Username)) continue;
-                if (!String.IsNullOrEmpty(filter.Email))
-                    if (!employee.Email.Contains(filter.Email)) continue;
-
-                FiltredEmployees.Add(employee);
-
-            }
-            return FiltredEmployees;
+                {"unread",false }
+            };
+            await _firestoreDb.GetFirestoreDb().Document($"Employees/{employeeId}/Messages/{messagesId}").UpdateAsync(update);
         }
-     */
+
+        /*   public IEnumerable<Employee> GetEmployees(EmployeeFilter filter)
+           {
+              foreach(Employee employee in Employees)
+               {
+                   if (!String.IsNullOrEmpty(filter.Username))
+                       if (!employee.Username.Contains(filter.Username)) continue;
+                   if (!String.IsNullOrEmpty(filter.FirstName))
+                       if (!employee.Firstname.Contains(filter.FirstName)) continue;
+                   if (!String.IsNullOrEmpty(filter.LastName))
+                       if (!employee.Lastname.Contains(filter.LastName)) continue;
+                   if (!String.IsNullOrEmpty(filter.Username))
+                       if (!employee.Username.Contains(filter.Username)) continue;
+                   if (!String.IsNullOrEmpty(filter.Email))
+                       if (!employee.Email.Contains(filter.Email)) continue;
+
+                   FiltredEmployees.Add(employee);
+
+               }
+               return FiltredEmployees;
+           }
+        */
         public async Task<bool>  ValidateUsername(string username)
         {
             var docRef = await _firestoreDb.GetFirestoreDb().Collection("Employees").WhereEqualTo("Username", username).GetSnapshotAsync();

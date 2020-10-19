@@ -1,5 +1,4 @@
 <div class="footer">text</div>
-
 <mat-sidenav-container class="sidenav-container">
   <mat-sidenav #drawer class="sidenav" fixedInViewport
       [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
@@ -19,15 +18,17 @@
       </mat-card>
       <mat-divider></mat-divider>
       <a mat-list-item routerLink="/dashboard">
-        <mat-icon aria-hidden="false" aria-label="Example home icon">dashboard</mat-icon>  Dashboard</a>
-      <a mat-list-item routerLink="/trainings"> <mat-icon>article </mat-icon>  Trainings</a>
-      <a mat-list-item routerLink="/employees" > <mat-icon>group </mat-icon>  Employees</a>
+        <mat-icon aria-hidden="false" aria-label="Example home icon">dashboard</mat-icon> <span class="iconText"> Dashboard</span> </a>
+      <a mat-list-item routerLink="/trainings"> <mat-icon>article </mat-icon>  <span class="iconText">Trainings</span></a>
+      <a mat-list-item routerLink="/employees" > <mat-icon>group </mat-icon>  <span class="iconText">Employees</span></a>
      
-      <a mat-list-item routerLink="/raports"><mat-icon>show_chart</mat-icon>Reports</a>
+      <a mat-list-item routerLink="/raports"><mat-icon>show_chart</mat-icon><span class="iconText">Reports</span></a>
+      <a mat-list-item routerLink="/events"><mat-icon>info</mat-icon><span class="iconText">Activity</span></a>
+      <a mat-list-item routerLink="/inbox">  <mat-icon [matBadgeHidden]="isHidden()" matBadge="{{ inboxUnread }}" matBadgeColor="warn" matBadgeSize="small">mail</mat-icon><span  class="iconText"><span class="iconText">Notifications</span></span></a>
 
-      <a mat-list-item routerLink="/{{id}}/profile" > <mat-icon>account_box</mat-icon>  Profile</a>
-
-      <a mat-list-item (click)="signOut()" routerLink="/login"> <mat-icon>logout</mat-icon> Logout</a>
+      <a mat-list-item routerLink="/{{id}}/profile" > <mat-icon>account_box</mat-icon> <span class="iconText">Profile</span> </a>
+      
+      <a mat-list-item (click)="signOut()" routerLink="/login"> <mat-icon>logout</mat-icon> <span class="iconText">Logout</span></a>
     </mat-nav-list>
 
     <mat-nav-list class="list" *ngIf="!Admin">
@@ -38,8 +39,9 @@
           <p  *ngIf="Admin" style=" color: green; text-align: center;" > Admin</p>
         </mat-card-content>
       </mat-card>
-      <a mat-list-item routerLink="/{{id}}/profile"><mat-icon>account_box</mat-icon>Profile</a>
-      <a mat-list-item routerLink="/employee/{{id}}/trainings"><mat-icon>article</mat-icon>Trainings</a>
+      <a mat-list-item routerLink="/{{id}}/profile"><mat-icon>account_box</mat-icon> <span class="iconText">Profile</span></a>
+      <a mat-list-item routerLink="/employee/{{id}}/trainings"><mat-icon>article</mat-icon> <span  class="iconText">Trainings</span> </a>
+      <a mat-list-item routerLink="/inbox">  <mat-icon [matBadgeHidden]="inboxUnread == 0" matBadge="{{ inboxUnread }}" matBadgeColor="warn" matBadgeSize="small">mail</mat-icon><span  class="iconText">Notifications</span></a>
 
       <a mat-list-item routerLink="/login"><mat-icon>logout</mat-icon>Logout</a>
 

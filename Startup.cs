@@ -47,6 +47,7 @@ namespace TrainingManagement
             services.AddScoped<IEmployee>(x => new EmployeeService(x.GetService<IFirestore>()));
             services.Configure<SmtpConfig>(Configuration.GetSection("SmtpSettings"));
             services.AddSingleton<IEmailSender, EmailService>();
+            services.AddScoped<INotify>(x=>  new NotifyService(x.GetService<IFirestore>()));
 
         }
    

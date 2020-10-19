@@ -93,5 +93,26 @@ namespace TrainingManagement.Controllers
             return Ok();
         }
 
+       [HttpPost("api/employee/messagesread")]
+        public async Task<ActionResult> MarkRead([FromBody]IList<string> messagesId,[FromQuery] string employeeId)
+        {
+         foreach(string id in messagesId)
+            {
+              await  _employeeService.MarkRead(id, employeeId);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost("api/employee/messagesdelete")]
+        public async Task<ActionResult> Delete([FromBody] IList<string> messagesId, [FromQuery] string employeeId)
+        {
+            foreach (string id in messagesId)
+            {
+                await _employeeService.DeleteMessage(id, employeeId);
+            }
+
+            return Ok();
+        }
     }
 }

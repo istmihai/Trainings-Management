@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Http;
@@ -43,7 +44,22 @@ namespace TrainingManagement.Controllers
                     this.HttpContext.Session.SetString("Uid", token.Uid);
                     this.HttpContext.Session.SetString("Role", "Employee");
                 }
-                _logger.LogInformation(FirestoreLoggerEvents.Login, "User {id} logged in at {time}", token.Uid, DateTime.Now);
+
+                string _message = $"Employee {token.Uid}  logged in  at {DateTime.UtcNow}";
+
+
+                LogEntry logEntry = new LogEntry()
+                {
+                    Action = FirestoreLoggerEvents.RemoveEmployee.ToString(),
+                    LogInfo = new Dictionary<string, string>() { 
+                                                             {"employeeId",token.Uid } },
+
+                    Message = _message
+                };
+
+                string message = JsonSerializer.Serialize<LogEntry>(logEntry);
+
+                _logger.LogInformation(message);
                     
                 return Ok();
                 
@@ -104,8 +120,7 @@ namespace TrainingManagement.Controllers
         [HttpPost("api/newpassword")]
         public async Task<ActionResult> NewPassword(NewPassword newPassword)
         {
-            try
-            {
+           
                 var FireUser = await FirebaseAuth.DefaultInstance.GetUserByEmailAsync(newPassword.Email);
                 var codeRef = await _firestore.GetFirestoreDb().Collection("ActivationCode").Document(FireUser.Uid).GetSnapshotAsync();
                 var code = codeRef.ConvertTo<PasswordCode>();
@@ -126,13 +141,8 @@ namespace TrainingManagement.Controllers
 
                 }
                 return Ok();
-            }
-            catch (Exception)
-            {
-
-                return BadRequest();
-            }
-           
+            
+          
         }
 
     }

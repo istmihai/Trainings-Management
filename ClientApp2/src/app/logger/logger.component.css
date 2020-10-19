@@ -1,0 +1,18 @@
+table {
+    width: 100%;
+  }
+.filter {
+  display: flex;
+  
+  justify-content: space-evenly;
+
+}
+.mat-form-field{
+  padding:5px;
+}
+button{
+ 
+}
+input{
+  color:black;
+}

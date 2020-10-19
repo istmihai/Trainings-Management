@@ -42,6 +42,8 @@ import { MatInputModule } from '@angular/material/input';
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
 
 
+import {MatBadgeModule} from '@angular/material/badge'; 
+
 import {DragDropModule} from '@angular/cdk/drag-drop'; 
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import {MatAutocompleteModule} from '@angular/material/autocomplete'; 
@@ -76,6 +78,8 @@ import { EmployeeBarchartComponent } from './charts/employee-barchart/employee-b
 import { TrainingsInprogressComponent } from './charts/trainings-inprogress/trainings-inprogress.component';
 import { EmployeeTrainingsFilterComponent } from './employees/employee-trainings-filter/employee-trainings-filter.component';
 import { ChartsGeneralComponent } from './charts-general/charts-general.component';
+import { LoggerComponent } from './logger/logger.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -133,7 +137,11 @@ import { ChartsGeneralComponent } from './charts-general/charts-general.componen
    
     EmployeeTrainingsFilterComponent,
    
-    ChartsGeneralComponent
+    ChartsGeneralComponent,
+   
+    LoggerComponent,
+   
+    MessagesComponent
    
     
   ],
@@ -146,6 +154,7 @@ import { ChartsGeneralComponent } from './charts-general/charts-general.componen
     AngularFireMessagingModule,
     BrowserModule,
     MatDividerModule,
+    MatBadgeModule,
     NgxChartsModule,
     DragDropModule,
     MatSnackBarModule,

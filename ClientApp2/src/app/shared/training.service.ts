@@ -107,13 +107,15 @@ GetEmployeeTraining(employeeId:string){
     return this.db.collection("Employees").doc(employeeId).collection<trainingInfo>("Training_Employees").snapshotChanges().pipe(
       switchMap(data=>{
        console.log(data);
+
        const doc=  data.map(a=>{return this.db.collection("Trainings").doc<Training>(a.payload.doc.id).valueChanges().pipe(map(x=>{
-       let aux:Training = x;
       
-      x.Id=a.payload.doc.id;
-       this.GetDownloadUrl(employeeId,x.Id,a.payload.doc.data().Document).subscribe(data=>x.Document=data );
-       x.Status=a.payload.doc.data().status;
-         return x;
+        let aux:Training = x;
+      
+      aux.Id=a.payload.doc.id;
+       this.GetDownloadUrl(employeeId,x.Id,a.payload.doc.data().Document).subscribe(data=>aux.Document=data );
+       aux.Status=a.payload.doc.data().status;
+         return aux;
        }))});
       
  return combineLatest(doc);}
