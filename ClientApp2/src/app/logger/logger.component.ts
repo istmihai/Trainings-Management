@@ -14,21 +14,21 @@ import { LogEvent } from '../shared/event.model';
 export class LoggerComponent implements OnInit {
   displayedColumns: string[] = ['Date', 'Action', 'Message']
   dataSource = new MatTableDataSource<LogEvent>();
-  last;
+  last:LogEvent;
   query:firebase.firestore.Query;
   LogsFilter = this.fb.group(
     {
       Action:[],
       TimeRange:[],
       LogLevel:[],
-      Pagination:[10]
+      Pagination:[2]
     }
   );
   constructor(private db:AngularFirestore,private fb:FormBuilder) { }
 Actions=['TrainingCreate','TrainingEdit'];
 LogLevels=['Information','Warning'];
   ngOnInit(): void {
-      this.db.collection<LogEvent>("Events",ref=>ref.limit(1).orderBy("TimeStamp")).valueChanges().pipe(take(1)).subscribe(
+      this.db.collection<LogEvent>("Events",ref=>ref.limit(this.Pagination.value).orderBy("TimeStamp")).valueChanges().pipe(take(1)).subscribe(
       data=>{
         this.dataSource=new MatTableDataSource(data);
         this.last=data[data.length-1];
@@ -70,11 +70,12 @@ LogLevels=['Information','Warning'];
     console.log(this.last);
     this.db.collection<LogEvent>("Events",ref=>{
       let query : firebase.firestore.Query=ref;
-      if(this.Action.value) query=query.where('Action','==',this.Action.value);
+     if(this.Action.value) query=query.where('Action','==',this.Action.value);
       if(this.Time.value) query=query.where('TimeStamp','<=',this.Time.value);
       if(this.LogLevel.value) query=query.where("LogLevel","==",this.LogLevel.value);
-       query= query.orderBy("TimeStamp").startAfter(this.last).limit(this.Pagination.value);
-       this.query=query;
+    query= query.orderBy("TimeStamp").startAfter(this.last.TimeStamp).limit(this.Pagination.value);
+    this.query=query; 
+      console.log("pag",this.Pagination.value)
        console.log(query);
       return query;
     }).valueChanges().pipe(take(1)).subscribe(
@@ -87,11 +88,12 @@ LogLevels=['Information','Warning'];
   lastPage(){
     this.db.collection<LogEvent>("Events",ref=>{
       let query : firebase.firestore.Query=ref;
-   //   if(this.Action.value) query=query.where('Action','==',this.Action.value);
-   //   if(this.Time.value) query=query.where('TimeStamp','<=',this.Time.value);
-    //  if(this.LogLevel.value) query=query.where("LogLevel","==",this.LogLevel.value);
-       query= query.orderBy("Action",'desc').startAfter(this.last).limit(this.Pagination.value);
+      if(this.Action.value) query=query.where('Action','==',this.Action.value);
+      if(this.Time.value) query=query.where('TimeStamp','<=',this.Time.value);
+      if(this.LogLevel.value) query=query.where("LogLevel","==",this.LogLevel.value);
+       query= query.orderBy("TimeStamp").endBefore(this.last.TimeStamp).limitToLast(this.Pagination.value);
        this.query=query;
+       console.log(this.query)
       return query;
     }).valueChanges().pipe(take(1)).subscribe(
         data=>{  this.dataSource=new MatTableDataSource(data)

@@ -80,6 +80,7 @@ import { EmployeeTrainingsFilterComponent } from './employees/employee-trainings
 import { ChartsGeneralComponent } from './charts-general/charts-general.component';
 import { LoggerComponent } from './logger/logger.component';
 import { MessagesComponent } from './messages/messages.component';
+import { IconPipePipe } from './logger/icon-pipe.pipe';
 
 @NgModule({
   declarations: [
@@ -141,8 +142,9 @@ import { MessagesComponent } from './messages/messages.component';
    
     LoggerComponent,
    
-    MessagesComponent
+    MessagesComponent,
    
+   IconPipePipe
     
   ],
   imports: [

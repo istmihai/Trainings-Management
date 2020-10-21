@@ -18,13 +18,19 @@
                   <mat-form-field>
                   <mat-label>Log Level</mat-label>
                   <mat-select formControlName="LogLevel" >
-                    <mat-option *ngFor="let log of LogLevels" [value]="log">{{log}}</mat-option>
+                    <mat-option *ngFor="let log of LogLevels" [value]="log"> <mat-icon>{{log | IconPipe}} </mat-icon>  {{log}}</mat-option>
+                    
                   </mat-select>
                 </mat-form-field>
                         </form>
                         </div>
+                        
+<button mat-button (click)="lastPage()"> <mat-icon>navigate_before</mat-icon> </button>
+<mat-form-field   appearance="standard">
+  <input  matInput   formControlName="Pagination" type="number">
+</mat-form-field>
+<button mat-button (click)="nextPage()" > <mat-icon>navigate_next</mat-icon> </button>
                         <button mat-stroked-button (click)="Filter()"> Filter <mat-icon>search</mat-icon> </button>
-
 
 
 <div class="mat-elevation-z8">
