@@ -114,5 +114,12 @@ namespace TrainingManagement.Controllers
 
             return Ok();
         }
+
+        [HttpPost("api/employee/fcmtoken")]
+        public async Task<ActionResult> UpdateFCM([FromQuery] string employeeId ,[FromQuery] string fcmToken)
+        {
+            await _employeeService.UpdateFcm(employeeId, fcmToken);
+            return Ok();
+        }
     }
 }

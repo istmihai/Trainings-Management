@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using FirebaseAdmin.Auth;
+using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -52,7 +54,7 @@ namespace TrainingManagement.Controllers
                 {
                     Action = FirestoreLoggerEvents.RemoveEmployee.ToString(),
                     LogInfo = new Dictionary<string, string>() { 
-                                                             {"employeeId",token.Uid } },
+                   {"employeeId",token.Uid } },
 
                     Message = _message
                 };
@@ -60,7 +62,11 @@ namespace TrainingManagement.Controllers
                 string message = JsonSerializer.Serialize<LogEntry>(logEntry);
 
                 _logger.LogInformation(message);
-                    
+                Dictionary<string, object> metaData = new Dictionary<string, object>()
+                {
+                    {"metaData.lastSignInTime",Timestamp.GetCurrentTimestamp() }
+                };
+               await  _firestore.GetFirestoreDb().Collection("Employees").Document(token.Uid).UpdateAsync(metaData);
                 return Ok();
                 
             }
@@ -91,7 +97,7 @@ namespace TrainingManagement.Controllers
         }
 
         [HttpPost("api/logout")]
-        public async Task<ActionResult> Logout()
+        public async  Task<ActionResult> Logout()
         {
             this.Response.Cookies.Delete(".AspNetCore.Session");
             this.HttpContext.Session.Clear();
@@ -133,6 +139,7 @@ namespace TrainingManagement.Controllers
                         Password = newPassword.Password,
                         EmailVerified = true,
                         Disabled = false
+                
 
 
                     };

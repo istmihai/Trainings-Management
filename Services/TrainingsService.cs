@@ -75,15 +75,14 @@ namespace TrainingManagement.Services
                 {"InProgress",0 },
                 {"Finished",0 }
             };
-          var tran=  await _firestoreDb.GetFirestoreDb().Collection("Trainings").AddAsync(training);
-         await   _firestoreDb.GetFirestoreDb().Collection("Trainings").Document(tran.Id).Collection("Stats").Document("Stats").CreateAsync(stats);
+            var tran=  await _firestoreDb.GetFirestoreDb().Collection("Trainings").AddAsync(training);
+            await   _firestoreDb.GetFirestoreDb().Collection("Trainings").Document(tran.Id).Collection("Stats").Document("Stats").CreateAsync(stats);
             return tran.Id;
         }
 
         public async Task DeleteTraining( string id)
         {
             await _firestoreDb.GetFirestoreDb().Collection("Trainings").Document(id).DeleteAsync();
-            Training training = await GetTraining(id);
             var subTr= await _firestoreDb.GetFirestoreDb().Collection("Trainings").Document(id).Collection("Training_Employees").GetSnapshotAsync();
             foreach(var x in subTr)
             {
@@ -119,9 +118,9 @@ namespace TrainingManagement.Services
       public async Task UploadDocument(string trainingId,string employeeId,string code)
         {
             Dictionary<FieldPath, object> document = new Dictionary<FieldPath, object>()
-           {
+            {
                {new FieldPath("Document"),code },
-           };
+            };
             await _firestoreDb.GetFirestoreDb().Document($"Employees/{employeeId}/Training_Employees/{trainingId}").UpdateAsync(document);
         }
         public async Task UpdateTraining(string trainingId,   string  employeeId, string Status)
@@ -168,7 +167,7 @@ namespace TrainingManagement.Services
             var trainingStats = await _firestoreDb.GetFirestoreDb().Collection("Departaments").Document(Departament).Collection("Statistics").Document(year).GetSnapshotAsync();
 
          var Stats= trainingStats.ToDictionary();
-            builder.Append(" ,January,February,March,April,June,July,August,September,November,December");
+            builder.Append(" January,February,March,April,June,July,August,September,November,December");
 
             foreach(var mstats in Stats)
             {
@@ -197,6 +196,16 @@ namespace TrainingManagement.Services
 
             }*/
             return builder;
+        }
+
+        public async Task GiveRating(string trainingId, Review review)
+        {
+            var employeeTrainingRef= _firestoreDb.GetFirestoreDb().Document($"Trainings/{trainingId}/Reviews/{review.EmployeeId}");
+            review.Timestamp = Timestamp.GetCurrentTimestamp();
+            await employeeTrainingRef.SetAsync(review);
+
+
+
         }
     }
 }

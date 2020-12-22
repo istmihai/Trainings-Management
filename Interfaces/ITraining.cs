@@ -13,6 +13,8 @@ namespace TrainingManagement.Interfaces
         Task RemoveTraining(string trainingId, string employeeId);
         Task EditTraining(Training training,string trainingId);
         Task UploadDocument(string trainingId,string employeeId, string code);
+
+        Task GiveRating(string trainingId, Review review);
         Task<StringBuilder> DownloadRaport(string trainingId);
         Task<StringBuilder> DownloadRaportDepartament(string Departament,string year);
     }

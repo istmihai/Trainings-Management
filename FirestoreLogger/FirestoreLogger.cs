@@ -42,8 +42,9 @@ namespace TrainingManagement.FirestoreLogger
             string msg = formatter(state,exception);
            LogEntry log = JsonSerializer.Deserialize<LogEntry>(msg);
             log.TimeStamp = Timestamp.GetCurrentTimestamp();
-            Dictionary<string, object> test = new Dictionary<string, object>()
+            Dictionary<string, object> logEntry = new Dictionary<string, object>()
             {
+                {"LogLevel",logLevel.ToString() },
                 {"Action", log.Action},
                 {"Message",log.Message },
                 {"TimeStamp",Timestamp.GetCurrentTimestamp() },
@@ -51,7 +52,7 @@ namespace TrainingManagement.FirestoreLogger
           
             };
          //   _firestoreClient.Collection("Events").AddAsync(log);
-            _firestoreClient.Collection("Events").AddAsync(test);
+            _firestoreClient.Collection("Events").AddAsync(logEntry);
 
         }
     

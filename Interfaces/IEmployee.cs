@@ -15,6 +15,8 @@ namespace TrainingManagement.Interfaces
         Task MarkRead(string messagesId,string employeeId);
         Task DeleteMessage(string messagesId, string employeeId);
         Task<bool> ValidateUsername(string username);
-     //   IEnumerable<Employee> GetEmployees(EmployeeFilter filter);
+        Task UpdateFcm(string employeeId, string token);
+
+        //   IEnumerable<Employee> GetEmployees(EmployeeFilter filter);
     }
 }

@@ -1,0 +1,53 @@
+<div class="wrapper">
+  <mat-card  >
+    <ngx-charts-bar-horizontal
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="BarChartData"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    (select)="departamentSelect($event)"
+    id="chart"
+  ></ngx-charts-bar-horizontal>
+  
+  <form [formGroup]="spendingsForm">
+    <mat-form-field>
+    <mat-label>Select Year</mat-label>
+      <mat-select formControlName="year" (selectionChange)="getYear()" required>
+        <mat-option></mat-option>
+        <mat-option *ngFor="let year of years" [value]="year">
+            {{year}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+<button mat-stroked-button (click)="exportImg()">
+  Download image <mat-icon>photo</mat-icon>
+</button>
+  </mat-card>
+  
+  <mat-card >
+  
+    <ngx-charts-pie-chart
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="single"
+    [gradient]="gradient"
+    [legend]="showLegend2"
+    [legendPosition]="legendPosition"
+    [labels]="showLabels"
+    [doughnut]="isDoughnut"
+    id="chart2"
+    >
+  
+  </ngx-charts-pie-chart>
+
+  </mat-card>
+
+</div>

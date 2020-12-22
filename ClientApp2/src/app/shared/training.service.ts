@@ -9,6 +9,7 @@ import { Observable, concat, forkJoin, combineLatest, defer, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { once } from 'process';
 import { AngularFireStorage } from '@angular/fire/storage';
+import { Review } from './review.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class TrainingService {
   
   employeeList:Observable<Employee[] | Employee>;
   constructor(private db:AngularFirestore,private http:HttpClient,private store:AngularFireStorage) { }
+
   GetEmplolyees(trainingId:string){
     const EmployeeList = defer(()=>{
       return this.db.collection("Trainings").doc(trainingId).collection<trainingInfo>("Employee_Trainings").valueChanges().pipe(
@@ -30,7 +32,7 @@ export class TrainingService {
            return aux;
          }))});
          
-   return combineLatest(doc);}
+        return combineLatest(doc);}
         )
         )
       
@@ -38,22 +40,23 @@ export class TrainingService {
     EmployeeList.subscribe(data=>console.log(data));
     return EmployeeList;
    }
-   
-  
-    
+      
 generateRaport(trainingId:string){
  return this.http.get(`/api/training/raport?trainingId=${trainingId}`,{responseType:'blob'});
 }
+
 generateRaportDepartament(departament:string,year:string){
   return this.http.get(`/api/training/reportDepartament?departament=${departament}&year=${year}`,{responseType:'blob'});
- }
+}
+
 GetTrainings(){
   return this.db.collection<Training>('Trainings').valueChanges({"idField":"Id"});
-  this.db.collection("").doc("").snapshotChanges().subscribe(   )
 }
+
 GetTraining(id:string){
   return this.db.collection("Trainings").doc<Training>(id).valueChanges()
 }
+
 UploadDocument(event,employeeId:string,trainingId:string){
   const file=event.target.files[0];
   const random =Math.random().toString(12).substring(2)
@@ -63,21 +66,26 @@ UploadDocument(event,employeeId:string,trainingId:string){
  task.snapshotChanges().pipe(
     finalize(()=>  this.http.post(`api/training/document?trainingId=${trainingId}&employeeId=${employeeId}&code=${random}`,'').subscribe())
   ).subscribe();
-  
   return task.percentageChanges();
-
 }
+
 DeleteDocument(training:Training,employeeId:string){
   this.store.storage.refFromURL(training.Document).delete().then(()=>
-  this.http.post(`api/training/document?trainingId=${training.Id}&employeeId=${employeeId}&code=`,'').subscribe()
-  )
-
+  this.http.post(`api/training/document?trainingId=${training.Id}&employeeId=${employeeId}&code=`,'').subscribe())
 }
+
 GetDownloadUrl(employeeId:string,trainingId:string,code:string){
   const filePath=`Employees/${employeeId}/training/${trainingId}_${code}.pdf`;
   const ref =this.store.ref(filePath);
   return  ref.getDownloadURL();
 }
+
+GetProfilePicture(photourl:string,id:string){
+  const filePath=`Employees/${id}/${photourl}`;
+  const ref =this.store.ref(filePath);
+  return ref.getDownloadURL();
+}
+
 DeleteTraining(training:Training){
   console.log(training.Id)
  return this.http.post<Training>(`api/training/delete?trainingId=${training.Id}`,'');
@@ -107,23 +115,50 @@ GetEmployeeTraining(employeeId:string){
     return this.db.collection("Employees").doc(employeeId).collection<trainingInfo>("Training_Employees").snapshotChanges().pipe(
       switchMap(data=>{
        console.log(data);
-
-       const doc=  data.map(a=>{return this.db.collection("Trainings").doc<Training>(a.payload.doc.id).valueChanges().pipe(map(x=>{
-      
-        let aux:Training = x;
-      
-      aux.Id=a.payload.doc.id;
-       this.GetDownloadUrl(employeeId,x.Id,a.payload.doc.data().Document).subscribe(data=>aux.Document=data );
-       aux.Status=a.payload.doc.data().status;
-         return aux;
+       const doc=  data.map(a=>{return this.db.collection("Trainings").doc<Training>(a.payload.doc.id).valueChanges().pipe(map(
+         x=>{
+          let aux:Training = x;
+          aux.Id=a.payload.doc.id;
+          this.GetDownloadUrl(employeeId,x.Id,a.payload.doc.data().Document).subscribe(data=>aux.Document=data );
+          aux.Status=a.payload.doc.data().status;
+          return aux;
        }))});
-      
  return combineLatest(doc);}
       )
       )
+
     
   })
 }
+
+GiveReview(trainingId:string,review:Review){
+   return this.http.post(`api/training/review?trainingId=${trainingId}`,review);
+}
+
+GetReview(trainingId:string,employeeId:string){
+  this.db.doc(`Trainings/${trainingId}/Reviews/${employeeId}`).valueChanges();
+}
+
+GetReviews(trainingId:string){
+  return defer(()=> this.db.collection("Trainings").doc(trainingId).collection<Review>("Reviews").valueChanges().pipe(switchMap(data=>{
+      const doc = data.map(a=>{return this.db.doc<Employee>(`Employees/${a.employeeId}`).valueChanges().pipe(
+        map(x=>{
+          console.log(x);
+         let newReview:Review=a;
+          
+         newReview.employee=x;
+         this.GetProfilePicture(x.PhotoUrl,a.employeeId).subscribe(data=>newReview.employee.PhotoUrl=data)
+         return newReview;
+        })
+      )
+
+      })
+      return combineLatest(doc);
+
+
+  })))
+}
+
 
 GetStatusName(status:string){
   if(status==="NotStarted") return "Not started";

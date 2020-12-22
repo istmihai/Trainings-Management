@@ -54,6 +54,9 @@ namespace TrainingManagement.Models
         [FirestoreDocumentUpdateTimestamp]
         public DateTime UpdateStamp { get; set; }
 
+        [FirestoreProperty("metaData")]
+        public EmployeeMetadata MetaData { get; set; }
+
         public override string ToString()
         {
             return $"{Username},{Firstname},{Lastname},{Email},{Birthdate.ToShortDateString()},{Departament}";

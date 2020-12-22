@@ -3,6 +3,8 @@
         <mat-form-field>
             <mat-label>Action</mat-label>
             <mat-select formControlName="Action" >
+              <mat-option></mat-option>
+
               <mat-option *ngFor="let status of Actions" [value]="status">{{status}}</mat-option>
             </mat-select>
                 </mat-form-field>
@@ -17,31 +19,35 @@
                   </mat-form-field> 
                   <mat-form-field>
                   <mat-label>Log Level</mat-label>
-                  <mat-select formControlName="LogLevel" >
-                    <mat-option *ngFor="let log of LogLevels" [value]="log"> <mat-icon>{{log | IconPipe}} </mat-icon>  {{log}}</mat-option>
+                  <mat-select formControlName="LogLevel"  >
+                    <mat-option></mat-option>
+                    <mat-option *ngFor="let log of LogLevels"  [value]="log"> <mat-icon>{{log | iconPipe}} </mat-icon>  {{log}}</mat-option>
                     
                   </mat-select>
                 </mat-form-field>
-                        </form>
-                        </div>
                         
-<button mat-button (click)="lastPage()"> <mat-icon>navigate_before</mat-icon> </button>
+                        
+                        
+<button mat-button (click)="nextPage()"> <mat-icon>navigate_before</mat-icon> </button>
 <mat-form-field   appearance="standard">
   <input  matInput   formControlName="Pagination" type="number">
 </mat-form-field>
-<button mat-button (click)="nextPage()" > <mat-icon>navigate_next</mat-icon> </button>
+<button mat-button (click)="lastPage()" > <mat-icon>navigate_next</mat-icon> </button>
                         <button mat-stroked-button (click)="Filter()"> Filter <mat-icon>search</mat-icon> </button>
-
-
+                      </form>
+                      </div>
 <div class="mat-elevation-z8">
     <table mat-table [dataSource]="dataSource">
-  
+      <ng-container matColumnDef="LogLevel">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let row"> <mat-icon [ngStyle]="{'color':  row.LogLevel==='Information' ? '#1a73e8' : 'red' }">  {{row.LogLevel | iconPipe}}</mat-icon> </td>
+      </ng-container>
       <!-- Position Column -->
       <ng-container matColumnDef="Date">
         <th mat-header-cell *matHeaderCellDef> Date </th>
         <td mat-cell *matCellDef="let row"> {{row.TimeStamp.toDate() | date }} </td>
       </ng-container>
-  
+      
       <!-- Name Column -->
       <ng-container matColumnDef="Action">
         <th mat-header-cell *matHeaderCellDef> Action </th>
@@ -58,5 +64,4 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   </div>

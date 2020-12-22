@@ -8,9 +8,13 @@
 
     </mat-toolbar>
     
-    <mat-nav-list class="list" *ngIf="Admin">
+    <mat-nav-list class="list" style="overflow:hidden" *ngIf="Admin">
+
       <mat-card class="mat-elevation-z0 outline">
-        <img mat-card-md-image src="{{profileUrl | async}}" >
+        <div class="profile-picture">
+          <img  src="{{profileUrl | async}}" >
+
+        </div>
         <mat-card-content *ngIf="Employee$ | async as Employee">
          <p > {{Employee.Firstname }}  {{Employee.Lastname }}</p>
           <p  *ngIf="Admin" style=" color: green; text-align: center;" > Admin</p>
@@ -21,7 +25,7 @@
         <mat-icon aria-hidden="false" aria-label="Example home icon">dashboard</mat-icon> <span class="iconText"> Dashboard</span> </a>
       <a mat-list-item routerLink="/trainings"> <mat-icon>article </mat-icon>  <span class="iconText">Trainings</span></a>
       <a mat-list-item routerLink="/employees" > <mat-icon>group </mat-icon>  <span class="iconText">Employees</span></a>
-     
+      <a mat-list-item routerLink="/spendings"><mat-icon>euro</mat-icon><span class="iconText">Spendings</span></a>
       <a mat-list-item routerLink="/raports"><mat-icon>show_chart</mat-icon><span class="iconText">Reports</span></a>
       <a mat-list-item routerLink="/events"><mat-icon>info</mat-icon><span class="iconText">Activity</span></a>
       <a mat-list-item routerLink="/inbox">  <mat-icon [matBadgeHidden]="isHidden()" matBadge="{{ inboxUnread }}" matBadgeColor="warn" matBadgeSize="small">mail</mat-icon><span  class="iconText"><span class="iconText">Notifications</span></span></a>
@@ -33,7 +37,10 @@
 
     <mat-nav-list class="list" *ngIf="!Admin">
       <mat-card class="mat-elevation-z0 outline">
-        <img mat-card-md-image src="{{profileUrl | async}}" >
+        <div class="profile-picture">
+          <img  src="{{profileUrl | async}}" >
+
+        </div>
         <mat-card-content *ngIf="Employee$ | async as Employee">
          <p > {{Employee.Firstname }}  {{Employee.Lastname }}</p>
           <p  *ngIf="Admin" style=" color: green; text-align: center;" > Admin</p>

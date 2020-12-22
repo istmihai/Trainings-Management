@@ -40,7 +40,7 @@ namespace TrainingManagement.Controllers
             {
                 Action = FirestoreLoggerEvents.EditTraining.ToString(),
                 LogInfo = new Dictionary<string, string>() { {"adminId",this.HttpContext.Session.GetString("Uid") },
-                                                             {"objectId",trainingId} },
+                                                             {"trainingId",trainingId} },
             
                 Message = $"Admin {this.HttpContext.Session.GetString("Uid")}  added  training \"{trainingId}\" at {DateTime.UtcNow}"
             };
@@ -63,7 +63,7 @@ namespace TrainingManagement.Controllers
             {
                 Action = FirestoreLoggerEvents.EditTraining.ToString(),
                 LogInfo = new Dictionary<string, string>() { {"adminId",this.HttpContext.Session.GetString("Uid") },
-                                                             {"objectId",id} },
+                                                             {"trainingId",id} },
      
                 Message = _message
             };
@@ -78,7 +78,7 @@ namespace TrainingManagement.Controllers
         public async Task <ActionResult> AddTraining([FromQuery] string trainingId,[FromQuery] string employeeId)
         {
             await _trainingService.AddTraining(trainingId, employeeId);
-            string _message = $"Admin {this.HttpContext.Session.GetString("Uid")}  added employee \"{employeeId}\" to training \"{trainingId}\" at {DateTime.UtcNow}";
+            string _message = $"Admin {this.HttpContext.Session.GetString("Uid")}  added employee \" {employeeId} \" to training \" {trainingId} \" at {DateTime.UtcNow}";
 
 
             LogEntry logEntry = new LogEntry()
@@ -102,7 +102,7 @@ namespace TrainingManagement.Controllers
         {
             await _trainingService.RemoveTraining(trainingId, employeeId);
 
-            string _message = $"Admin {this.HttpContext.Session.GetString("Uid")}  removed employee \"{employeeId}\" from training \"{trainingId}\" at {DateTime.UtcNow}";
+            string _message = $"Admin {this.HttpContext.Session.GetString("Uid")}  removed employee \" {employeeId} \" from training \" {trainingId} \" at {DateTime.UtcNow}";
 
 
             LogEntry logEntry = new LogEntry()
@@ -149,7 +149,7 @@ namespace TrainingManagement.Controllers
         public async Task<ActionResult> DeleteTraining([FromQuery]  string trainingId)
         {
           await  _trainingService.DeleteTraining(trainingId);
-            string Message = $"Admin {this.HttpContext.Session.GetString("Uid")} added deleted training \"{trainingId}\" at {DateTime.UtcNow}";
+            string Message = $"Admin {this.HttpContext.Session.GetString("Uid")} added deleted training \" {trainingId} \" at {DateTime.UtcNow}";
 
          /*LogEntry logEntry = new LogEntry(FirestoreLoggerEvents.EditTraining.ToString(),this.HttpContext.Session.GetString("Uid"),trainingId,Message);
          
@@ -175,6 +175,7 @@ namespace TrainingManagement.Controllers
             return File(Encoding.UTF8.GetBytes
       (x.ToString()), "text/csv", "test.csv");
         }
+
         [HttpGet("api/training/reportDepartament")]
         public async Task<ActionResult> DownloaDepartamentReport([FromQuery] string Departament,[FromQuery] string year)
         {
@@ -182,6 +183,13 @@ namespace TrainingManagement.Controllers
 
             return File(Encoding.UTF8.GetBytes
       (x.ToString()), "text/csv", "Training.csv");
+        }
+
+        [HttpPost("api/training/review")]
+        public async Task<ActionResult> GiveFeedback([FromQuery] string trainingId,[FromBody] Review review)
+        {
+           await _trainingService.GiveRating(trainingId, review);
+            return Ok();
         }
 
 

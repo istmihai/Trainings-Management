@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Post Feedback</h2>
+
+<mat-dialog-content [formGroup]="form" >
+
+    <app-star-review (ratingUpdated)="updateRating($event)" isChangeable="true"></app-star-review>
+   <div></div>
+    <mat-form-field appearance="standard">
+        
+        <input type="text" formControlName="message" matInput>
+    </mat-form-field>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <button class="mat-raised-button"(click)="close()">Close</button>
+    <button class="mat-raised-button mat-primary"(click)="save()">Send Feedback</button>
+</mat-dialog-actions>

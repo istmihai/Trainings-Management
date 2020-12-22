@@ -7,6 +7,51 @@ const db = admin.firestore();
 const decrement = admin.firestore.FieldValue.increment(-1);
 const increment =admin.firestore.FieldValue.increment(1);
 
+
+exports.Trainings=functions.region('europe-west3').firestore
+    .document('Trainings/{trainingId}/Employee_Trainings/{employeeId}')
+    .onWrite(async (change,context)=>{
+      const newStatus= change.after.exists ? change.after.data().status : null;
+      const oldStatus = change.before.exists ? change.before.data().status : null;
+
+      const employeeRef=  db.collection('Employees').doc(context.params.employeeId);
+      const trainingref=  db.collection('Trainings').doc(context.params.trainingId);
+
+      let employee=  (await employeeRef.get()).data()
+      let training= (await trainingref.get()).data()
+     const month = training.StartDate.toDate().getMonth()+1;
+     const year = training.StartDate.toDate().getFullYear();
+     const employeeStats=db.collection('Employees').doc(`${context.params.employeeId}/Statistics/${year}`);
+     const trainingStats= db.collection('Trainings').doc(`${context.params.trainingId}/Stats/Stats`);
+     const departamentStats=db.collection("Departaments").doc(employee.Departament).collection('Statistics').doc(`${year}`);
+     const departamentsSpendings = db.collection("Departaments").doc(employee.Departament).collection("Spendings").doc(`${year}`);
+ 
+     if(!change.after.exists)
+    {
+      trainingStats.update(oldStatus,admin.firestore.FieldValue.increment(-1));
+      employeeStats.update(`${month}.${oldStatus}`,admin.firestore.FieldValue.increment(-1))
+     departamentStats.update(`${month}.${oldStatus}`,admin.firestore.FieldValue.increment(-1));
+     departamentsSpendings.update(`${context.params.trainingId}`,admin.firestore.FieldValue.increment(-1))
+    }
+   else if(change.before.exists){
+      trainingStats.update(newStatus,admin.firestore.FieldValue.increment(1));
+      trainingStats.update(oldStatus,admin.firestore.FieldValue.increment(-1));
+      employeeStats.update(`${month}.${newStatus}`,admin.firestore.FieldValue.increment(1))
+      employeeStats.update(`${month}.${oldStatus}`,admin.firestore.FieldValue.increment(-1))
+      departamentStats.update(`${month}.${newStatus}`,admin.firestore.FieldValue.increment(1));
+      departamentStats.update(`${month}.${oldStatus}`,admin.firestore.FieldValue.increment(-1));
+    }
+    else {
+      trainingStats.update(newStatus,admin.firestore.FieldValue.increment(1));
+      employeeStats.update(`${month}.${newStatus}`,admin.firestore.FieldValue.increment(1))
+      departamentStats.update(`${month}.${newStatus}`,admin.firestore.FieldValue.increment(1));
+      departamentsSpendings.update(`${context.params.trainingId}`,admin.firestore.FieldValue.increment(1))
+
+    }
+return null;
+    })
+
+    /*
 exports.updateTraining = functions.region('europe-west3').firestore
     .document('Trainings/{trainingId}/Employee_Trainings/{employeeId}')
     .onUpdate( async(change, context) => {
@@ -89,6 +134,7 @@ return null;
       return null;
     });
 
+    */
     exports.addTraining2 = functions.region('europe-west3').firestore
     .document('Trainings/{trainingId}')
     .onCreate( async(change, context) => {
@@ -138,3 +184,43 @@ return null;
         Stats.update(statusDate,admin.firestore.FieldValue.increment(-1));
       return null;
     });
+
+    exports.FcmMessaging = functions.region('europe-west3').firestore
+    .document('Employees/{employeeId}/Messages/{messageId}')
+    .onCreate( async(snap, context) => {
+       const employeeRef = db.doc(`Employees/${context.params.employeeId}`)
+    
+
+       let fcmToken=  (await employeeRef.get()).data().fcmToken
+    //   console.log(fcmToken);
+       const payload={
+        notification:{
+          title:"Training Matrix",
+          body: snap.data().message,
+          clickAction: "localhost:44319"
+              }
+          };
+      admin.messaging().sendToDevice(fcmToken,payload);
+return null;
+    });
+
+    exports.Ratings = functions.region('europe-west3').firestore
+    .document('Trainings/{trainingId}/Reviews/{employeeId}')
+    .onWrite(async(change,context)=>
+    {
+      let ratingSum =0;
+      let count=0;
+      console.log(`Trainings/${context.params.trainingId}/Reviews`)
+      const reviewsRef= db.collection(`Trainings/${context.params.trainingId}/Reviews`);
+      const reviewsSnapshot = await reviewsRef.get();
+     reviewsSnapshot.forEach(doc => {
+        ratingSum+= parseFloat(doc.data().rating);
+        console.log(doc.data.rating)
+        count++;
+     });
+     const newRating = ratingSum/count;
+     console.log(ratingSum,count);
+     await db.doc(`Trainings/${context.params.trainingId}`).update({"rating":newRating});
+     return null;
+    }
+    )

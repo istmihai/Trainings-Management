@@ -5,7 +5,6 @@ import { Observable, of, merge, combineLatest, forkJoin } from 'rxjs';
 import { TrainingService } from 'src/app/shared/training.service';
 import { Training } from 'src/app/shared/training.model';
 import { Employee } from 'src/app/shared/employee.model';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { EmployeesService } from 'src/app/shared/employees.service';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { EmployeeDialogComponent } from '../employee-dialog/employee-dialog.component';
@@ -13,10 +12,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { take, switchMap, map, toArray, mergeAll, tap } from 'rxjs/operators';
-import { element } from 'protractor';
-import { strict } from 'assert';
-import { sign } from 'crypto';
+import { tap } from 'rxjs/operators';
+
 import { FormBuilder } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -30,10 +27,11 @@ export class TrainingEmployeesComponent implements OnInit,AfterViewInit {
   @ViewChild(MatTable) table: MatTable<Employee>;
   @ViewChild(MatSort) sort: MatSort;
  displayedColumns = [ 'firstname','lastname','username','email','status','delete'];
-
+  rating:number;
  employees:Observable<Employee[]>;
   dataSource: MatTableDataSource<Employee>;
   AddNew: boolean=false;
+  showFeedback:boolean=false;
   trainingId:string;
   status:status[]=[
     { value:"Finished" , viewValue:"Finished"},
@@ -81,7 +79,9 @@ export class TrainingEmployeesComponent implements OnInit,AfterViewInit {
               Status:data.Status,
               Document:data.Document,
               })
+             
           });
+          
           this.TrainingForm.disable();
         })
        
@@ -115,6 +115,10 @@ export class TrainingEmployeesComponent implements OnInit,AfterViewInit {
       this.dataSource.sort = this.sort;
      console.log(this.dataSource.data)})
      
+     this.trainingService.GetTraining(this.trainingId).subscribe(data=>{
+      
+      console.log(data);
+     })
     }
   ngAfterViewInit():void{
    
@@ -135,11 +139,18 @@ export class TrainingEmployeesComponent implements OnInit,AfterViewInit {
         
       )
     }
+
     getColor(status:string){
       if(status==="Finished") return "green";
       else if(status==="InProgress") return "yellow";
       else return "red";
     }
+
+    show(){
+        if(this.showFeedback===true) this.showFeedback=false;
+        this.showFeedback=true;
+    }
+
     test(){
     this.trainingService.generateRaport(this.trainingId).subscribe(data=>
      { const a = document.createElement('a')

@@ -23,10 +23,12 @@ namespace TrainingManagement.Services
             };
             return input;
         }
+
         public NotifyService(IFirestore firestoreClient)
         {
             _firestoreClient = firestoreClient;
         }
+
         public async Task NotifyChangeTraining(string employeeId,  string trainingId)
         {
           var colRef=  _firestoreClient.GetFirestoreDb().Collection("Employees").Document(employeeId).Collection("Messages");

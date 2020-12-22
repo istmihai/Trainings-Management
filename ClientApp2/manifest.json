@@ -1,0 +1,13 @@
+
+{
+    "name": "Training Matrix",
+    "start_url": "/",
+    "orientation": "any",
+    "scope": "/",
+    "display": "standalone",
+    "short_name": "Angular PWA",
+    "theme_color": "#472D21",
+    "background_color": "#C0B764",
+    "gcm_sender_id": "103953800507"
+
+  }

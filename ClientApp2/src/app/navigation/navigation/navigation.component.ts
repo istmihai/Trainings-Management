@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { Employee } from 'src/app/shared/employee.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { MessagingService } from 'src/app/messaging.service';
 
 @Component({
   selector: 'app-navigation',
@@ -25,14 +26,16 @@ export class NavigationComponent implements OnInit {
       shareReplay()
     );
 
-  constructor(private breakpointObserver: BreakpointObserver,private auth:AuthService,private db:AngularFirestore, private store: AngularFireStorage) {
+  constructor(private breakpointObserver: BreakpointObserver,private auth:AuthService,private db:AngularFirestore, private store: AngularFireStorage ,public msgService:MessagingService) {
+
     this.auth.role.subscribe(data=>{
       this.Admin=data;
-      
       console.log(data);
     })    
     this.auth.employee$.subscribe(data=>
       {
+        this.msgService.requestPermission(data.Id);
+
         this.id=data.Id;
         const filePath=`Employees/${data.Id}/${data.PhotoUrl}`;
         const ref =this.store.ref(filePath);

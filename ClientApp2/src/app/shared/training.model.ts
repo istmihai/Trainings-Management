@@ -9,7 +9,10 @@ export interface Training{
     EndDate:firestore.Timestamp;
     Location:string;
     Status:string;
+    rating:number;
+    price:number;
     Document:string;
     CreateDataTime:Date;
     Employees:Employee[];
 }
+

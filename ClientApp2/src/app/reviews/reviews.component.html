@@ -1,0 +1,31 @@
+
+<div class="review">
+  
+
+    <div *ngFor="let review of Reviews">
+           
+      
+        
+        <mat-card>
+            <mat-card-header>
+                <div mat-card-avatar [style.background-image]="GetProfilePicture(review.employee.PhotoUrl)" class="example-header-image"></div>
+                <mat-card-title>{{review.employee.Firstname}} {{review.employee.Lastname}}</mat-card-title>
+                <mat-card-subtitle> 
+                    <app-star-review [isChangeable]="false" [rating]="review.rating" ></app-star-review> {{review.timeStamp.toDate() | date:'shortDate'}}
+
+                </mat-card-subtitle>
+            </mat-card-header>
+
+                <mat-card-content>
+                   <p>
+                    {{review.reviewMessage}}
+                   </p> 
+                </mat-card-content>
+
+        </mat-card>
+    </div>
+
+
+    
+
+</div>

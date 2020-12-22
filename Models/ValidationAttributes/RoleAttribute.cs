@@ -11,7 +11,7 @@ namespace TrainingManagement.Models.ValidationAttributes
         private readonly string[] _validRoles = { "Employee", "Admin", };
 
         public string GetErrorMessage() =>
-      $" Role value is not a valid ";
+      $" Role value is not  valid ";
         protected override ValidationResult IsValid(object value,
       ValidationContext validationContext)
         {

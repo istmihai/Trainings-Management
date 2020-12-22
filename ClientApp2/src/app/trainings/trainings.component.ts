@@ -14,6 +14,7 @@ import { trainingInfo } from '../shared/trainingInfo.model';
 import { MatDialogConfig, MatDialog } from '@angular/material/dialog';
 import { TrainingEditComponent } from './training-edit/training-edit.component';
 import { TrainingDeleteComponent } from './training-delete/training-delete.component';
+import { PostFeedbackComponent } from '../reviews/post-feedback/post-feedback.component';
 @Component({
   selector: 'app-training',
   templateUrl: './trainings.component.html',
@@ -21,7 +22,7 @@ import { TrainingDeleteComponent } from './training-delete/training-delete.compo
 })
 export class TrainingsComponent implements  OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
-  displayedColumns = ['title', 'description','startdate','enddate','status','employees','edit','delete'];
+  displayedColumns = ['title', 'description','startdate','enddate','status','employees','edit','delete','feedback'];
   selectedTraining:Training;
   show:boolean=false;
   trainings:Observable<Training[]>;
@@ -67,6 +68,17 @@ export class TrainingsComponent implements  OnInit {
     
   }
   
+  openFeedbackDialog(training:Training,){
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data=training;
+    const dialogRef=this.dialog.open(PostFeedbackComponent, dialogConfig); 
+    dialogRef.afterClosed().subscribe();
+    
+  }
+
   openDeleteTraining(training:Training){
     const dialogConfig = new MatDialogConfig();
 

@@ -31,12 +31,13 @@ export class TrainingEditComponent implements OnInit {
     constructor(private fb:FormBuilder,private dialogRef:MatDialogRef<EmployeeEditComponent>,@Inject(MAT_DIALOG_DATA) data, private trainingService:TrainingService,private http:HttpClient ) { 
    
           this.trainingId=data.Id;
-        
+        console.log(data.price);
             this.TrainingForm.patchValue({
               Title:data.Title,  
               Description:data.Description,
               StartDate:data.StartDate.toDate(),
               EndDate:data.EndDate.toDate(),
+              Price:data.price,
               Location:data.Location,
               Status:data.Status,
               Document:data.Document,
@@ -46,7 +47,6 @@ export class TrainingEditComponent implements OnInit {
     
     }
     UpdateTraining(){
-     var training:Training=this.TrainingForm.value;
       this.trainingService.EditTraining(this.TrainingForm.value,this.trainingId).subscribe();
     }
     receiveEmployees($event){

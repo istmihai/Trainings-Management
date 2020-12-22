@@ -2,10 +2,11 @@
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 using MimeKit.Encodings;
-using Org.BouncyCastle.Math.EC.Rfc7748;
+using Org.BouncyCastle.Security;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using TrainingManagement.Interfaces;
 using TrainingManagement.Models;
@@ -16,10 +17,12 @@ namespace TrainingManagement.Services
     public class EmployeeService : IEmployee
     {
         private readonly IFirestore _firestoreDb;
+        
 
-       public EmployeeService(IFirestore firestore)
+        public EmployeeService(IFirestore firestore)
         {
             _firestoreDb = firestore;
+
         }
 
     
@@ -44,7 +47,7 @@ namespace TrainingManagement.Services
             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Username").UpdateAsync("Username", FieldValue.ArrayUnion(employee.Username));
             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Email").UpdateAsync("Email", FieldValue.ArrayUnion(employee.Email));
             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Name").UpdateAsync("Name", FieldValue.ArrayUnion(employee.Firstname + " " + employee.Lastname));
-
+            employee.MetaData.CreationTime = Timestamp.GetCurrentTimestamp();
             await _firestoreDb.GetFirestoreDb().Collection("Employees").Document(auth.Uid).SetAsync(employee);
           
         }
@@ -66,12 +69,10 @@ namespace TrainingManagement.Services
             Employee _employee = snapshot.ConvertTo<Employee>();
 
             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Username").UpdateAsync("Username", FieldValue.ArrayRemove(_employee.Username));
-
-             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Email").UpdateAsync("Email", FieldValue.ArrayRemove(_employee.Email));
-             await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Name").UpdateAsync("Name", FieldValue.ArrayRemove(_employee.Firstname + " " + _employee.Lastname));
-
+            await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Email").UpdateAsync("Email", FieldValue.ArrayRemove(_employee.Email));
+            await _firestoreDb.GetFirestoreDb().Collection("EmployeesFilter").Document("Name").UpdateAsync("Name", FieldValue.ArrayRemove(_employee.Firstname + " " + _employee.Lastname));
             var employeeRef = _firestoreDb.GetFirestoreDb().Collection("Employees").Document(employeeId);
-            
+
             await employeeRef.DeleteAsync();
          
             await FirebaseAuth.DefaultInstance.DeleteUserAsync(employeeId);
@@ -112,6 +113,15 @@ namespace TrainingManagement.Services
                 {"unread",false }
             };
             await _firestoreDb.GetFirestoreDb().Document($"Employees/{employeeId}/Messages/{messagesId}").UpdateAsync(update);
+        }
+
+        public async Task UpdateFcm(string employeeId, string token)
+        {
+            Dictionary<string, object> fcmValue = new Dictionary<string, object>()
+            {
+                {"fcmToken",token }
+            };
+            await _firestoreDb.GetFirestoreDb().Document($"Employees/{employeeId}").UpdateAsync(fcmValue);
         }
 
         /*   public IEnumerable<Employee> GetEmployees(EmployeeFilter filter)

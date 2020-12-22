@@ -1,6 +1,7 @@
 .sidenav-container {
   height: 100%;
   color:white;
+  overflow: hidden;
 }
 .iconText{
   padding:5px;
@@ -9,6 +10,7 @@
   width: 200px;
   background-color:white;
   color:black;
+  overflow: hidden;
 }
 .list:last-child{
   vertical-align: bottom;
@@ -34,10 +36,14 @@
 .sidenav .mat-toolbar {
   background: inherit;
 }
-.img{
-  border : 1px;
+img{
+ 
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
 }
-.mat-sidenav-content{
+.profile-picture{
+
 }
 .badge {
   position: absolute;

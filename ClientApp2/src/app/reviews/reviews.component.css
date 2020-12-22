@@ -1,0 +1,22 @@
+p{
+    color:black;
+}
+
+.mat-card{
+    padding:30px;
+
+}
+
+.review{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
+
+img{
+ 
+    border-radius: 50%;
+    width: 00px;
+    height: 100px;
+  }

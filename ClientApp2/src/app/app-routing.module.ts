@@ -22,6 +22,8 @@ import { EmployeeTrainingsComponent } from './employees/employee-trainings/emplo
 import { ChartsGeneralComponent } from './charts-general/charts-general.component';
 import { LoggerComponent } from './logger/logger.component';
 import { MessagesComponent } from './messages/messages.component';
+import { ReviewsComponent } from './reviews/reviews.component';
+import { SpendingsComponent } from './spendings/spendings.component';
 const redirectUnauthorizedToLogin = () => redirectUnauthorizedTo(['login']);
 const routes: Routes = [
   {path:'login',component:LoginComponent},
@@ -42,7 +44,9 @@ const routes: Routes = [
   {path:'events',component:LoggerComponent},
   {path:'',component:DashboardComponent},
   {path:'inbox',component:MessagesComponent},
-  {path:'raports', component:ChartsGeneralComponent }
+  {path:'reviews',component:ReviewsComponent},
+  {path:'raports', component:ChartsGeneralComponent },
+  {path:'spendings',component:SpendingsComponent}
 ]}
 
 ];

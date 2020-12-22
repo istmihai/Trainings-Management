@@ -6,7 +6,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner'; 
 
 
@@ -81,6 +80,13 @@ import { ChartsGeneralComponent } from './charts-general/charts-general.componen
 import { LoggerComponent } from './logger/logger.component';
 import { MessagesComponent } from './messages/messages.component';
 import { IconPipePipe } from './logger/icon-pipe.pipe';
+import { FullNamePipe } from './logger/full-name.pipe';
+import { TrainingNamePipe } from './logger/training-name.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { ReviewsComponent } from './reviews/reviews.component';
+import { StarReviewComponent } from './reviews/star-review/star-review.component';
+import { PostFeedbackComponent } from './reviews/post-feedback/post-feedback.component';
+import { SpendingsComponent } from './spendings/spendings.component';
 
 @NgModule({
   declarations: [
@@ -144,7 +150,19 @@ import { IconPipePipe } from './logger/icon-pipe.pipe';
    
     MessagesComponent,
    
-   IconPipePipe
+   IconPipePipe,
+   
+   FullNamePipe,
+   
+   TrainingNamePipe,
+   
+   ReviewsComponent,
+   
+   StarReviewComponent,
+   
+   PostFeedbackComponent,
+   
+   SpendingsComponent
     
   ],
   imports: [
@@ -188,6 +206,7 @@ import { IconPipePipe } from './logger/icon-pipe.pipe';
     MatGridListModule,
     MatProgressSpinnerModule,
     MatMenuModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     
   ],
   providers: [   MatDatepickerModule,
